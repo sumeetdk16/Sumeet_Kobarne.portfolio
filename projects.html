@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5" />
+  <title>Projects | Sumeet Kobarne</title>
+  <meta name="description" content="Selected projects by Sumeet Kobarne — Full Stack Developer from Pune." />
+  <meta name="theme-color" content="#0a0a0a" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .bg-green {
+      background: linear-gradient(140deg, #081a0e 0%, #0c2e18 55%, #0e3f22 100%)
+    }
+
+    .bg-blue {
+      background: linear-gradient(140deg, #080d28 0%, #0b153e 55%, #0d1d56 100%)
+    }
+
+    .bg-purple {
+      background: linear-gradient(140deg, #110828 0%, #1c0d46 55%, #250f5e 100%)
+    }
+
+    .bg-warm {
+      background: linear-gradient(140deg, #1a0a02 0%, #311508 55%, #431c0a 100%)
+    }
+
+    .em-lg {
+      font-size: 80px;
+      filter: drop-shadow(0 6px 20px rgba(0, 0, 0, .5))
+    }
+  </style>
+</head>
+
+<body class="projects-page">
+  <a class="skip" href="#main">Skip to main content</a>
+  <div class="rail rail-t" aria-hidden="true"></div>
+  <div class="rail rail-l" aria-hidden="true"></div>
+  <div class="rail rail-r" aria-hidden="true"></div>
+  <canvas id="canvas" aria-hidden="true"></canvas>
+
+  <nav class="nav" aria-label="Primary navigation">
+    <div class="nav-pill">
+      <div class="nav-ind" aria-hidden="true"></div>
+      <a class="nav-a" href="index.html">Home</a>
+      <a class="nav-a on" href="projects.html">Projects</a>
+      <a class="nav-a" href="about.html">About</a>
+      <div class="nav-sep" aria-hidden="true"></div>
+      <button class="theme-btn" id="theme-btn" aria-label="Toggle colour theme">☀️</button>
+    </div>
+  </nav>
+
+  <div class="shell">
+    <main id="main">
+      <div class="wrap-lg">
+
+        <div style="padding:120px 0 56px; text-align:center;">
+          <span class="label">Projects</span>
+          <h1 class="h-lg r shiny-text"
+            style="font-size:clamp(32px, 5vw, 44px); line-height:1.2; font-weight:600; margin-top:8px;">Curated projects
+            showcasing technical depth.</h1>
+          <p class="r"
+            style="font-size:16px; color:var(--muted); line-height:1.6; margin-top:14px; max-width:600px; margin-left:auto; margin-right:auto; transition-delay:.07s;">
+            Built with React, Node.js, and Modern Web APIs.
+          </p>
+        </div>
+
+        <div class="proj-grid-new" style="margin-bottom: 96px;">
+
+          <!-- 01 Waste Snap -->
+          <div class="gl gl-proj-green r" style="transition-delay:.05s;">
+            <article class="proj-card-new">
+              <div class="proj-header-new">
+                <div class="proj-icon-box green">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4.5 16.5c-1.5-1.25-2.5-3-2.5-5 0-4 3.5-7.5 7.5-7.5h2.5" />
+                    <path d="M8 2 11 4.5 8 7" />
+                    <path d="M19.5 7.5c1.5 1.25 2.5 3 2.5 5 0 4-3.5 7.5-7.5 7.5H12" />
+                    <path d="M16 22 13 19.5 16 17" />
+                  </svg>
+                </div>
+                <span class="proj-num-new">01</span>
+              </div>
+              <h3 class="proj-title-new">Waste Snap</h3>
+              <ul class="proj-features-list">
+                <li>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span>Real-time waste image classifier.</span>
+                </li>
+                <li>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span>Identifies recyclable vs garbage.</span>
+                </li>
+                <li>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span>Saves location & tracks points.</span>
+                </li>
+                <li>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span>Built with high-accuracy models.</span>
+                </li>
+              </ul>
+              <a class="proj-link-new" href="https://github.com/sumeetdk16" target="_blank" rel="noopener">Learn more
+                ↗</a>
+            </article>
+          </div>
+
+          <!-- 02 Newsify -->
+          <div class="gl gl-proj-blue r" style="transition-delay:.1s;">
+            <article class="proj-card-new">
+              <div class="proj-header-new">
+                <div class="proj-icon-box blue">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                      d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2" />
+                    <path d="M18 14h-8M15 18h-5M10 6h8v4h-8V6Z" />
+                  </svg>
+                </div>
+                <span class="proj-num-new">02</span>
+              </div>
+              <h3 class="proj-title-new">Newsify</h3>
+              <ul class="proj-features-list">
+                <li>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span>Real-time news curation engine.</span>
+                </li>
+                <li>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span>Custom topic & regional interest.</span>
+                </li>
+                <li>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span>Dynamic article aggregation.</span>
+                </li>
+                <li>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span>Responsive headline previews.</span>
+                </li>
+              </ul>
+              <a class="proj-link-new" href="https://github.com/sumeetdk16" target="_blank" rel="noopener">Learn more
+                ↗</a>
+            </article>
+          </div>
+
+          <!-- 03 Currency Xchange -->
+          <div class="gl gl-proj-yellow r" style="transition-delay:.15s;">
+            <article class="proj-card-new">
+              <div class="proj-header-new">
+                <div class="proj-icon-box yellow">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="8" cy="12" r="6" />
+                    <circle cx="16" cy="12" r="6" />
+                  </svg>
+                </div>
+                <span class="proj-num-new">03</span>
+              </div>
+              <h3 class="proj-title-new">Currency Xchange</h3>
+              <ul class="proj-features-list">
+                <li>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span>Global exchange rate tracker.</span>
+                </li>
+                <li>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span>Custom hooks for state sync.</span>
+                </li>
+                <li>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span>External API house-keeping.</span>
+                </li>
+                <li>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span>Sleek Tailwind-driven UI.</span>
+                </li>
+              </ul>
+              <a class="proj-link-new" href="https://github.com/sumeetdk16" target="_blank" rel="noopener">Learn more
+                ↗</a>
+            </article>
+          </div>
+
+          <!-- 04 Task Master -->
+          <div class="gl gl-proj-purple r" style="transition-delay:.2s;">
+            <article class="proj-card-new">
+              <div class="proj-header-new">
+                <div class="proj-icon-box purple">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m9 11 3 3L22 4" />
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                  </svg>
+                </div>
+                <span class="proj-num-new">04</span>
+              </div>
+              <h3 class="proj-title-new">Task Master</h3>
+              <ul class="proj-features-list">
+                <li>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span>Full-stack task management.</span>
+                </li>
+                <li>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span>CRUD for complex workflows.</span>
+                </li>
+                <li>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span>Seamless real-time updates.</span>
+                </li>
+                <li>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span>Optimized state handling.</span>
+                </li>
+              </ul>
+              <a class="proj-link-new" href="https://github.com/sumeetdk16" target="_blank" rel="noopener">Learn more
+                ↗</a>
+            </article>
+          </div>
+
+        </div>
+
+      </div><!-- /wrap-lg -->
+
+      <footer class="footer wrap">
+        <span>2026 © Sumeet Kobarne</span>
+        <!-- <span>Built with Next.js · <a href="https://github.com/DavidHDev/rbp-portfolio" target="_blank" rel="noopener">React Bits Pro</a></span> -->
+      </footer>
+    </main>
+  </div>
+  <script src="shader.js"></script>
+</body>
+
+</html>

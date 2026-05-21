@@ -1,0 +1,20 @@
+{
+  "name": "sumeet-kobarne-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Personal portfolio website of Sumeet Kobarne",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.2.0"
+  },
+  "dependencies": {
+    "@types/react": "^19.2.15",
+    "@types/react-dom": "^19.2.3",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6"
+  }
+}
