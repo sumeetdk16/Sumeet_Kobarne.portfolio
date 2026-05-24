@@ -2,9 +2,16 @@
   "buildCommand": "bash build.sh",
   "outputDirectory": "dist",
   "framework": null,
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/index.html",    "destination": "/",        "permanent": true },
+    { "source": "/projects.html", "destination": "/projects", "permanent": true },
+    { "source": "/about.html",    "destination": "/about",    "permanent": true }
+  ],
   "rewrites": [
-    { "source": "/", "destination": "/index.html" },
+    { "source": "/",         "destination": "/index.html"    },
     { "source": "/projects", "destination": "/projects.html" },
-    { "source": "/about", "destination": "/about.html" }
+    { "source": "/about",    "destination": "/about.html"    }
   ]
 }
