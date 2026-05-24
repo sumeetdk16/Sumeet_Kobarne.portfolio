@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>About | Sumeet Kobarne</title>
   <meta name="description"
     content="About Sumeet Kobarne — Full Stack Developer & Competitive Programmer from Pune, India." />
@@ -16,7 +16,7 @@
   <div class="rail rail-t" aria-hidden="true"></div>
   <div class="rail rail-l" aria-hidden="true"></div>
   <div class="rail rail-r" aria-hidden="true"></div>
-  <canvas id="canvas" aria-hidden="true"></canvas>
+  <!-- Shader backdrop managed by shader.js -->
 
   <nav class="nav" aria-label="Primary navigation">
     <div class="nav-pill">
@@ -27,7 +27,27 @@
       <div class="nav-sep" aria-hidden="true"></div>
       <button class="theme-btn" id="theme-btn" aria-label="Toggle colour theme">☀️</button>
     </div>
+    <!-- Mobile hamburger -->
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
+
+  <!-- Mobile drawer -->
+  <div class="nav-drawer" id="nav-drawer" role="dialog" aria-modal="true" aria-label="Navigation menu">
+    <div class="nav-drawer-backdrop" id="nav-drawer-backdrop"></div>
+    <div class="nav-drawer-panel">
+      <nav class="nav-drawer-links">
+        <a class="nav-drawer-link" href="index.html">Home</a>
+        <a class="nav-drawer-link" href="projects.html">Projects</a>
+        <a class="nav-drawer-link on" href="about.html">About</a>
+      </nav>
+      <div class="nav-drawer-footer">
+        <span>Theme</span>
+        <button class="nav-drawer-theme-btn" id="nav-drawer-theme-btn" aria-label="Toggle colour theme"></button>
+      </div>
+    </div>
+  </div>
 
   <div class="shell">
     <main id="main">
@@ -37,7 +57,7 @@
      ABOUT HERO
 ══════════════════════════════════════ -->
         <div class="about-hero">
-          <h1 class="about-h r shiny-text">Hello! I'm <strong>Sumeet Kobarne.</strong></h1>
+          <h1 class="about-h r shiny-text">Hello! I'm <strong class="hero-name">Sumeet Kobarne.</strong></h1>
           <div class="about-bio r" style="transition-delay:.07s;">
             <p>I'm a dedicated tech enthusiast with a strong foundation in <strong>C++, data structures, and
                 algorithms</strong>. I've solved over <strong>500+ coding problems</strong> and earned a <strong>3-star
@@ -88,7 +108,7 @@
                 <li class="xp-item">
                   <div class="xp-logo" style="font-size:10px;">CES</div>
                   <div class="xp-body">
-                    <div class="xp-co">CES Abhiman English Medium School</div>
+                    <div class="xp-co">Dr. Cyrus Poonawalla English Medium School & Junior College</div>
                     <div class="xp-role">Secondary School Certificate (SSC)</div>
                   </div>
                   <div class="xp-date">2022</div>
@@ -106,7 +126,7 @@
      WHAT I DO
 ══════════════════════════════════════ -->
         <section class="sec" aria-label="Skills">
-          <span class="label r">What I do</span>
+          <span class="label r">My Skills</span>
           <div class="skills r" style="transition-delay:.07s;">
             <span class="skill">C++ Programming</span>
             <span class="skill">Data Structures &amp; Algorithms</span>
@@ -122,7 +142,7 @@
             <span class="skill">Python</span>
             <span class="skill">Full Stack Development</span>
             <span class="skill">Problem Solving</span>
-            <span class="skill">Web Performance</span>
+
           </div>
         </section>
 
@@ -140,54 +160,47 @@
         <div class="mq-wrap r" style="margin-top:20px;transition-delay:.06s;">
           <div class="mq-track">
             <!-- Set 1 -->
-            <div class="mq-item"><img src="https://cdn.simpleicons.org/cplusplus/00599C" alt="C++" /><span>C++</span>
-            </div>
-            <div class="mq-item"><img src="https://cdn.simpleicons.org/javascript/F7DF1E"
-                alt="JavaScript" /><span>JavaScript</span></div>
-            <div class="mq-item"><img src="https://cdn.simpleicons.org/react/61DAFB" alt="React" /><span>React.js</span>
-            </div>
-            <div class="mq-item"><img src="https://cdn.simpleicons.org/nodedotjs/339933"
-                alt="Node.js" /><span>Node.js</span></div>
-            <div class="mq-item"><img src="https://cdn.simpleicons.org/tailwindcss/06B6D4"
-                alt="Tailwind CSS" /><span>Tailwind CSS</span></div>
-            <div class="mq-item"><img src="https://cdn.simpleicons.org/mongodb/47A248"
-                alt="MongoDB" /><span>MongoDB</span></div>
-            <div class="mq-item"><img src="https://cdn.simpleicons.org/mysql/4479A1" alt="MySQL" /><span>MySQL</span>
-            </div>
+            <div class="mq-item"><img src="https://cdn.simpleicons.org/cplusplus/00599C" alt="C++" /><span>C++</span></div>
+            <div class="mq-item"><img src="https://cdn.simpleicons.org/javascript/F7DF1E" alt="JavaScript" /><span>JavaScript</span></div>
+            <div class="mq-item"><img src="https://cdn.simpleicons.org/react/61DAFB" alt="React" /><span>React.js</span></div>
+            <div class="mq-item"><img src="https://cdn.simpleicons.org/nodedotjs/339933" alt="Node.js" /><span>Node.js</span></div>
+            <div class="mq-item"><img src="https://cdn.simpleicons.org/tailwindcss/06B6D4" alt="Tailwind CSS" /><span>Tailwind CSS</span></div>
+            <div class="mq-item"><img src="https://cdn.simpleicons.org/mongodb/47A248" alt="MongoDB" /><span>MongoDB</span></div>
+            <div class="mq-item"><img src="https://cdn.simpleicons.org/mysql/4479A1" alt="MySQL" /><span>MySQL</span></div>
             <div class="mq-item"><img src="https://cdn.simpleicons.org/git/F05032" alt="Git" /><span>Git</span></div>
-            <div class="mq-item"><img src="https://cdn.simpleicons.org/github/ffffff" alt="GitHub" /><span>GitHub</span>
+            <div class="mq-item"><img src="https://cdn.simpleicons.org/github/ffffff" alt="GitHub" /><span>GitHub</span></div>
+            <div class="mq-item"><img src="https://cdn.simpleicons.org/python/3776AB" alt="Python" /><span>Python</span></div>
+            <div class="mq-item"><img src="https://cdn.simpleicons.org/postman/FF6C37" alt="Postman" /><span>Postman</span></div>
+            <div class="mq-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 2.4L2.648 0l9.352 9-9.352 9L0 21.6 8.648 12z" fill="#007ACC"/><path d="M2.648 0L24 12 2.648 24 0 21.6l18.704-9.6L0 2.4z" fill="#007ACC"/></svg>
+              <span>VS Code</span>
             </div>
-            <div class="mq-item"><img src="https://cdn.simpleicons.org/python/3776AB" alt="Python" /><span>Python</span>
+            <div class="mq-item"><img src="https://cdn.simpleicons.org/html5/E34F26" alt="HTML5" /><span>HTML5</span></div>
+            <div class="mq-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 0h21l-1.91 21.563L11.977 24l-8.565-2.438L1.5 0zm17.09 4.413L5.41 4.41l.213 2.622 10.125.002-.255 2.716h-6.64l.24 2.573h6.182l-.366 3.523-2.91.804-2.956-.81-.188-2.11h-2.61l.29 3.855L12 19.288l5.373-1.53L18.59 4.414z" fill="#1572B6"/></svg>
+              <span>CSS3</span>
             </div>
-            <div class="mq-item"><img src="https://cdn.simpleicons.org/postman/FF6C37"
-                alt="Postman" /><span>Postman</span></div>
-            <div class="mq-item"><img src="https://cdn.simpleicons.org/visualstudiocode/007ACC" alt="VS Code" /><span>VS
-                Code</span></div>
-            <div class="mq-item"><img src="https://cdn.simpleicons.org/html5/E34F26" alt="HTML5" /><span>HTML5</span>
-            </div>
-            <div class="mq-item"><img src="https://cdn.simpleicons.org/css3/1572B6" alt="CSS3" /><span>CSS3</span></div>
             <!-- Set 2 (duplicate for seamless loop) -->
             <div class="mq-item"><img src="https://cdn.simpleicons.org/cplusplus/00599C" alt="" /><span>C++</span></div>
-            <div class="mq-item"><img src="https://cdn.simpleicons.org/javascript/F7DF1E"
-                alt="" /><span>JavaScript</span></div>
-            <div class="mq-item"><img src="https://cdn.simpleicons.org/react/61DAFB" alt="" /><span>React.js</span>
-            </div>
-            <div class="mq-item"><img src="https://cdn.simpleicons.org/nodedotjs/339933" alt="" /><span>Node.js</span>
-            </div>
-            <div class="mq-item"><img src="https://cdn.simpleicons.org/tailwindcss/06B6D4" alt="" /><span>Tailwind
-                CSS</span></div>
-            <div class="mq-item"><img src="https://cdn.simpleicons.org/mongodb/47A248" alt="" /><span>MongoDB</span>
-            </div>
+            <div class="mq-item"><img src="https://cdn.simpleicons.org/javascript/F7DF1E" alt="" /><span>JavaScript</span></div>
+            <div class="mq-item"><img src="https://cdn.simpleicons.org/react/61DAFB" alt="" /><span>React.js</span></div>
+            <div class="mq-item"><img src="https://cdn.simpleicons.org/nodedotjs/339933" alt="" /><span>Node.js</span></div>
+            <div class="mq-item"><img src="https://cdn.simpleicons.org/tailwindcss/06B6D4" alt="" /><span>Tailwind CSS</span></div>
+            <div class="mq-item"><img src="https://cdn.simpleicons.org/mongodb/47A248" alt="" /><span>MongoDB</span></div>
             <div class="mq-item"><img src="https://cdn.simpleicons.org/mysql/4479A1" alt="" /><span>MySQL</span></div>
             <div class="mq-item"><img src="https://cdn.simpleicons.org/git/F05032" alt="" /><span>Git</span></div>
             <div class="mq-item"><img src="https://cdn.simpleicons.org/github/ffffff" alt="" /><span>GitHub</span></div>
             <div class="mq-item"><img src="https://cdn.simpleicons.org/python/3776AB" alt="" /><span>Python</span></div>
-            <div class="mq-item"><img src="https://cdn.simpleicons.org/postman/FF6C37" alt="" /><span>Postman</span>
+            <div class="mq-item"><img src="https://cdn.simpleicons.org/postman/FF6C37" alt="" /><span>Postman</span></div>
+            <div class="mq-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 2.4L2.648 0l9.352 9-9.352 9L0 21.6 8.648 12z" fill="#007ACC"/><path d="M2.648 0L24 12 2.648 24 0 21.6l18.704-9.6L0 2.4z" fill="#007ACC"/></svg>
+              <span>VS Code</span>
             </div>
-            <div class="mq-item"><img src="https://cdn.simpleicons.org/visualstudiocode/007ACC" alt="" /><span>VS
-                Code</span></div>
             <div class="mq-item"><img src="https://cdn.simpleicons.org/html5/E34F26" alt="" /><span>HTML5</span></div>
-            <div class="mq-item"><img src="https://cdn.simpleicons.org/css3/1572B6" alt="" /><span>CSS3</span></div>
+            <div class="mq-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 0h21l-1.91 21.563L11.977 24l-8.565-2.438L1.5 0zm17.09 4.413L5.41 4.41l.213 2.622 10.125.002-.255 2.716h-6.64l.24 2.573h6.182l-.366 3.523-2.91.804-2.956-.81-.188-2.11h-2.61l.29 3.855L12 19.288l5.373-1.53L18.59 4.414z" fill="#1572B6"/></svg>
+              <span>CSS3</span>
+            </div>
           </div>
         </div>
       </section>
@@ -208,8 +221,8 @@
                   onerror="this.parentElement.innerHTML='LC'" />
               </div>
               <div class="plat-name">LeetCode</div>
-              <div class="plat-handle">sumeetdk</div>
-              <div class="plat-badge">80+ solved</div>
+              <!-- <div class="plat-handle">sumeetdk</div> -->
+              <!-- <div class="plat-badge">80+ solved</div> -->
             </a>
 
             <a class="plat cc r" href="https://www.codechef.com/users/sumeetdk" target="_blank" rel="noopener"
@@ -219,10 +232,10 @@
                   onerror="this.parentElement.innerHTML='CC'" />
               </div>
               <div class="plat-name">CodeChef</div>
-              <div class="plat-handle">sumeetdk</div>
-              <div class="plat-badge">3★ · 1600+ rating</div>
+              <!-- <div class="plat-handle">sumeetdk</div> -->
+              <!-- <div class="plat-badge">3★ · 1600+ rating</div> -->
             </a>
-
+            <!-- 
             <a class="plat cf r" href="https://codeforces.com/profile/sumeet_dk" target="_blank" rel="noopener"
               aria-label="Codeforces profile" style="transition-delay:.08s;">
               <div class="plat-ico" style="background:rgba(26,117,255,.1);">
@@ -232,7 +245,7 @@
               <div class="plat-name">Codeforces</div>
               <div class="plat-handle">sumeet_dk</div>
               <div class="plat-badge">Active</div>
-            </a>
+            </a> -->
 
             <a class="plat gfg r" href="https://www.geeksforgeeks.org/user/sumeetdk/" target="_blank" rel="noopener"
               aria-label="GeeksforGeeks profile" style="transition-delay:.12s;">
@@ -241,19 +254,19 @@
                   onerror="this.parentElement.innerHTML='GFG'" />
               </div>
               <div class="plat-name">GeeksforGeeks</div>
-              <div class="plat-handle">sumeetdk</div>
-              <div class="plat-badge">Active</div>
+              <!-- <div class="plat-handle">sumeetdk</div> -->
+              <!-- <div class="plat-badge">Active</div> -->
             </a>
 
 
-            <a class="plat cd r" href="https://codio.com" target="_blank" rel="noopener" aria-label="Codio profile"
-              style="transition-delay:.20s;">
+            <a class="plat cd r" href="https://codolio.com/profile/Sumeetdk" target="_blank" rel="noopener"
+              aria-label="Codio profile" style="transition-delay:.20s;">
               <div class="plat-ico"
                 style="background:rgba(241,90,34,.1);color:#f15a22;font-size:13px;font-weight:700;font-family:var(--mono);">
                 CD</div>
-              <div class="plat-name">Codio</div>
-              <div class="plat-handle">sumeetdk</div>
-              <div class="plat-badge">Active</div>
+              <div class="plat-name">Codolio</div>
+              <!-- <div class="plat-handle">sumeetdk</div> -->
+              <!-- <div class="plat-badge">Active</div> -->
             </a>
 
           </div>
@@ -266,7 +279,7 @@
   <section class="connect" aria-labelledby="connect-h">
     <div class="wrap">
       <h2 class="h-lg connect-h r shiny-text" id="connect-h"
-        style="text-transform: uppercase; letter-spacing: 0.05em; font-size: 28px; text-align: center; margin-bottom: 48px;">
+        style="text-transform: uppercase; letter-spacing: 0.05em; font-size: 28px; text-align: center; margin-bottom: 48px; font-weight: 800;">
         Contact Me</h2>
 
       <div class="contact-grid r" style="transition-delay:.06s;">
@@ -294,11 +307,9 @@
           </button>
         </form>
 
-        <!-- Right: Image -->
+        <!-- Right: Magnet Lines -->
         <div class="contact-image-wrap">
-          <video
-            src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_171521_25968ba2-b594-4b32-aab7-f6b69398a6fa.mp4"
-            autoplay loop muted playsinline class="contact-image"></video>
+          <div class="magnet-lines-container" id="magnet-lines-about"></div>
         </div>
       </div>
 
@@ -317,7 +328,7 @@
               d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
           </svg>
         </a>
-        <a class="icon-btn" href="https://x.com/sumeet_kobarne" target="_blank" rel="noopener" aria-label="X / Twitter">
+        <a class="icon-btn" href="https://x.com/SUMEET_DK" target="_blank" rel="noopener" aria-label="X / Twitter">
           <svg fill="currentColor" viewBox="0 0 24 24">
             <path
               d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.258 5.63 5.906-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
@@ -335,7 +346,12 @@
   </footer>
   </main>
   </div>
-  <script src="shader.js"></script>
+  <script type="module" src="shader.js"></script>
+  <script src="pixel-canvas.js"></script>
+  <script src="cursor-trail.js"></script>
+  <script src="magnet-lines.js"></script>
+  <script src="variable-proximity.js"></script>
+  <script src="interactions.js"></script>
 </body>
 
 </html>

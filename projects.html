@@ -3,10 +3,10 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Projects | Sumeet Kobarne</title>
   <meta name="description" content="Selected projects by Sumeet Kobarne — Full Stack Developer from Pune." />
-  <meta name="theme-color" content="#0a0a0a" />
+  <meta name="theme-color" content="#0d0a08" />
   <link rel="stylesheet" href="style.css" />
   <style>
     .bg-green {
@@ -37,7 +37,7 @@
   <div class="rail rail-t" aria-hidden="true"></div>
   <div class="rail rail-l" aria-hidden="true"></div>
   <div class="rail rail-r" aria-hidden="true"></div>
-  <canvas id="canvas" aria-hidden="true"></canvas>
+  <!-- Shader backdrop managed by shader.js -->
 
   <nav class="nav" aria-label="Primary navigation">
     <div class="nav-pill">
@@ -48,13 +48,33 @@
       <div class="nav-sep" aria-hidden="true"></div>
       <button class="theme-btn" id="theme-btn" aria-label="Toggle colour theme">☀️</button>
     </div>
+    <!-- Mobile hamburger -->
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
+
+  <!-- Mobile drawer -->
+  <div class="nav-drawer" id="nav-drawer" role="dialog" aria-modal="true" aria-label="Navigation menu">
+    <div class="nav-drawer-backdrop" id="nav-drawer-backdrop"></div>
+    <div class="nav-drawer-panel">
+      <nav class="nav-drawer-links">
+        <a class="nav-drawer-link" href="index.html">Home</a>
+        <a class="nav-drawer-link on" href="projects.html">Projects</a>
+        <a class="nav-drawer-link" href="about.html">About</a>
+      </nav>
+      <div class="nav-drawer-footer">
+        <span>Theme</span>
+        <button class="nav-drawer-theme-btn" id="nav-drawer-theme-btn" aria-label="Toggle colour theme"></button>
+      </div>
+    </div>
+  </div>
 
   <div class="shell">
     <main id="main">
       <div class="wrap-lg">
 
-        <div style="padding:120px 0 56px; text-align:center;">
+        <div class="projects-header">
           <span class="label">Projects</span>
           <h1 class="h-lg r shiny-text"
             style="font-size:clamp(32px, 5vw, 44px); line-height:1.2; font-weight:600; margin-top:8px;">Curated projects
@@ -68,7 +88,7 @@
         <div class="proj-grid-new" style="margin-bottom: 96px;">
 
           <!-- 01 Waste Snap -->
-          <div class="gl gl-proj-green r" style="transition-delay:.05s;">
+          <div class="r" style="transition-delay:.05s;">
             <article class="proj-card-new">
               <div class="proj-header-new">
                 <div class="proj-icon-box green">
@@ -119,7 +139,7 @@
           </div>
 
           <!-- 02 Newsify -->
-          <div class="gl gl-proj-blue r" style="transition-delay:.1s;">
+          <div class="r" style="transition-delay:.1s;">
             <article class="proj-card-new">
               <div class="proj-header-new">
                 <div class="proj-icon-box blue">
@@ -169,7 +189,7 @@
           </div>
 
           <!-- 03 Currency Xchange -->
-          <div class="gl gl-proj-yellow r" style="transition-delay:.15s;">
+          <div class="r" style="transition-delay:.15s;">
             <article class="proj-card-new">
               <div class="proj-header-new">
                 <div class="proj-icon-box yellow">
@@ -218,7 +238,7 @@
           </div>
 
           <!-- 04 Task Master -->
-          <div class="gl gl-proj-purple r" style="transition-delay:.2s;">
+          <div class="r" style="transition-delay:.2s;">
             <article class="proj-card-new">
               <div class="proj-header-new">
                 <div class="proj-icon-box purple">
@@ -276,7 +296,9 @@
       </footer>
     </main>
   </div>
-  <script src="shader.js"></script>
+  <script type="module" src="shader.js"></script>
+  <script src="cursor-trail.js"></script>
+  <script src="interactions.js"></script>
 </body>
 
 </html>
