@@ -1075,12 +1075,19 @@ html.theme-transitioning .hero .h-xl.shiny-text {
 }
 
 .footer-back-top svg{
-  width:12px;
-  height:12px;
-  transition:transform .22s var(--ease);
+  width:14px;
+  height:14px;
+  transition:transform .3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  flex-shrink:0;
 }
 .footer-back-top:hover svg{
-  transform:translateY(-2px);
+  transform:translateY(-4px);
+  animation:bounce-up 0.6s ease-in-out;
+}
+
+@keyframes bounce-up {
+  0%, 100% { transform: translateY(-4px); }
+  50% { transform: translateY(-8px); }
 }
 
 /* Mobile footer */
@@ -3667,4 +3674,148 @@ html.theme-transitioning .hero .h-xl.shiny-text {
   .footer-card-link {
     font-size: 13px;
   }
+}
+
+
+/* ══════════════════════════════════════════
+   ABOUT HERO WITH FLIPPING BOARD
+══════════════════════════════════════════ */
+.about-content-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 48px;
+  align-items: center;
+  margin-top: 36px;
+}
+
+.about-flipping-board {
+  position: relative;
+}
+
+/* Flipping Board Container — tight around the tiles */
+.flipping-board-container {
+  width: 100%;
+  padding: 28px 20px;
+  background: rgba(5, 5, 5, 0.4);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.04), 0 10px 30px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+[data-theme="light"] .flipping-board-container {
+  background: rgba(255, 255, 255, 0.5);
+  border-color: rgba(0, 0, 0, 0.06);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.9), 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+/* Flipping Board */
+.flipping-board {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  width: 100%;
+}
+
+.flip-row {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+}
+
+.flip-tile {
+  position: relative;
+  width: 14px;
+  height: 22px;
+  perspective: 600px;
+}
+
+.flip-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #1c1c1c 0%, #0e0e0e 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  color: rgba(255, 255, 255, 0.95);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.07),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.5),
+    0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="light"] .flip-face {
+  background: linear-gradient(180deg, #e8e8e8 0%, #d4d4d4 100%);
+  border-color: rgba(0, 0, 0, 0.12);
+  color: rgba(10, 10, 10, 0.95);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.08),
+    0 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+.flip-front {
+  transform: rotateX(0deg);
+}
+
+.flip-back {
+  transform: rotateX(180deg);
+}
+
+/* Smooth two-phase flip: front folds away, back unfolds in */
+@keyframes flipFrontOut {
+  0%   { transform: rotateX(0deg);   }
+  100% { transform: rotateX(-90deg); }
+}
+@keyframes flipBackIn {
+  0%   { transform: rotateX(90deg); }
+  100% { transform: rotateX(0deg);  }
+}
+
+.flip-tile.flipping .flip-front {
+  animation: flipFrontOut 0.22s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+.flip-tile.flipping .flip-back {
+  animation: flipBackIn  0.22s cubic-bezier(0, 0, 0.6, 1) 0.22s forwards;
+}
+
+/* Responsive */
+@media (max-width: 960px) {
+  .about-content-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+  .about-flipping-board {
+    max-width: 380px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .flipping-board-container { padding: 20px 14px; }
+  .flip-tile  { width: 11px; height: 17px; }
+  .flip-face  { font-size: 10px; }
+  .flipping-board { gap: 5px; }
+  .flip-row   { gap: 3px; }
+}
+
+@media (max-width: 480px) {
+  .flipping-board-container { padding: 16px 12px; }
+  .flip-tile  { width: 9px; height: 14px; }
+  .flip-face  { font-size: 8px; }
+  .flipping-board { gap: 4px; }
+  .flip-row   { gap: 2px; }
 }

@@ -1,11 +1,5 @@
 // Footer live time display
-function updateFooterTime() {
-  const timeElements = [
-    document.getElementById('footer-time'),
-    document.getElementById('footer-time-about'),
-    document.getElementById('footer-time-projects')
-  ];
-
+(function() {
   function formatTime() {
     const now = new Date();
     
@@ -30,8 +24,10 @@ function updateFooterTime() {
     return `${displayHours}:${minutes}:${seconds} ${ampm}\n${dayName}, ${monthName} ${date}, ${year} (GMT +05:30)`;
   }
 
-  function update() {
+  function updateTime() {
     const timeString = formatTime();
+    const timeElements = document.querySelectorAll('[id^="footer-time"]');
+    
     timeElements.forEach(el => {
       if (el) {
         el.textContent = timeString;
@@ -39,16 +35,19 @@ function updateFooterTime() {
     });
   }
 
-  // Update immediately
-  update();
-  
-  // Update every second
-  setInterval(update, 1000);
-}
+  function init() {
+    // Update immediately on load
+    updateTime();
+    
+    // Update every second
+    setInterval(updateTime, 1000);
+  }
 
-// Initialize when DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', updateFooterTime);
-} else {
-  updateFooterTime();
-}
+  // Initialize as soon as possible
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    // DOM is already ready
+    init();
+  }
+})();

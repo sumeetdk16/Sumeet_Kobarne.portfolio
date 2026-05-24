@@ -695,13 +695,12 @@
               </div>
             </div>
 
-            
             <!-- Location -->
             <div class="footer-col">
               <h3>Location</h3>
               <div class="footer-location">
                 <div class="footer-location-city">Pune, India</div>
-                <div class="footer-location-time" id="footer-time">Loading time...</div>
+                <div class="footer-location-time" id="footer-time">--:--:-- --<br/>Loading...</div>
                 <div class="footer-info-item" style="margin-top:8px;">
                   <br/>
                 </div>
@@ -711,13 +710,13 @@
 
           <div class="footer-bottom">
             <div class="footer-copyright">
-              ©2026 Sumeet Kobarne · Open for Internships
+              ©2026 Sumeet Kobarne 
             </div>
             <a href="#main" class="footer-back-top">
-              Back to top
               <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M12 19V5M5 12l7-7 7 7"/>
               </svg>
+              Back to top
             </a>
           </div>
         </div>
@@ -730,10 +729,14 @@
   <script type="module" src="shader.js"></script>
   <script src="pixel-canvas.js"></script>
   <script src="cursor-trail.js"></script>
+  <!-- Inline time update for instant display -->
+  <script>
+    (function(){var n=new Date(),h=n.getHours(),m=n.getMinutes().toString().padStart(2,'0'),s=n.getSeconds().toString().padStart(2,'0'),a=h>=12?'PM':'AM',d=h%12||12,w=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],M=['January','February','March','April','May','June','July','August','September','October','November','December'],t=d+':'+m+':'+s+' '+a+'\n'+w[n.getDay()]+', '+M[n.getMonth()]+' '+n.getDate()+', '+n.getFullYear()+' (GMT +05:30)',e=document.getElementById('footer-time');if(e)e.textContent=t;})();
+  </script>
+  <script src="footer-time.js"></script>
   <script src="magnet-lines.js"></script>
   <script src="variable-proximity.js"></script>
   <script src="interactions.js"></script>
-  <script src="footer-time.js"></script>
   <script src="draggable-footer.js"></script>
   <script>
     window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
