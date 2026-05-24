@@ -248,3 +248,34 @@
     });
   });
 })();
+
+/* ── 6. CONTACT ME DROPDOWN ─────────────── */
+(function () {
+  const btn      = document.getElementById('contact-dropdown-btn');
+  const dropdown = document.getElementById('contact-dropdown');
+  if (!btn || !dropdown) return;
+
+  function open() {
+    dropdown.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+  }
+  function close() {
+    dropdown.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+  }
+
+  btn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    dropdown.classList.contains('open') ? close() : open();
+  });
+
+  // Close on outside click
+  document.addEventListener('click', function (e) {
+    if (!btn.contains(e.target) && !dropdown.contains(e.target)) close();
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') close();
+  });
+})();
