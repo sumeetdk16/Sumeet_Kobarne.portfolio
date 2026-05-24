@@ -5,7 +5,7 @@
   "description": "Personal portfolio website of Sumeet Kobarne",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "bash build.sh",
     "preview": "vite preview"
   },
   "devDependencies": {
