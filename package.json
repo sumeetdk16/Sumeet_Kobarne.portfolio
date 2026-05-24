@@ -15,6 +15,7 @@
     "@paper-design/shaders": "^0.0.76",
     "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
+    "@vercel/speed-insights": "^2.0.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6"
   }
