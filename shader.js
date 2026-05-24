@@ -13,7 +13,10 @@ import {
 } from '@paper-design/shaders';
 
 (function () {
-  // Only run on pages that have a hero section
+  // Always mark page as ready so CSS opacity gates don't block content
+  document.documentElement.classList.add('shader-ready');
+
+  // Only run shader on pages that have a hero section
   const heroSection = document.querySelector('.hero');
   if (!heroSection) return;
 
@@ -86,10 +89,7 @@ import {
   let shaderMount;
   let shaderInitialized = false;
   
-  // Mark page as ready immediately (show content with fallback gradient)
-  document.documentElement.classList.add('shader-ready');
-  
-  // Initialize shader with retry logic
+  // (shader-ready already set at top of IIFE)
   function initShader(retryCount = 0) {
     try {
       shaderMount = new ShaderMount(shaderWrapper, grainGradientFragmentShader, uniforms, {}, 1);
@@ -288,10 +288,38 @@ import {
    SCROLL REVEAL
 ═══════════════════════════════════════════ */
 (function () {
+  const els = document.querySelectorAll('.r');
+
+  // Fallback: if IntersectionObserver never fires (e.g. elements already in view
+  // on load, or observer blocked), reveal everything after 800ms
+  const fallback = setTimeout(() => {
+    els.forEach(el => el.classList.add('in'));
+  }, 800);
+
   const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
-  }, { threshold: .08, rootMargin: '0px 0px -50px 0px' });
-  document.querySelectorAll('.r').forEach(el => obs.observe(el));
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        obs.unobserve(e.target);
+      }
+    });
+    // If all elements are revealed, clear the fallback
+    if (document.querySelectorAll('.r:not(.in)').length === 0) {
+      clearTimeout(fallback);
+    }
+  }, { threshold: 0, rootMargin: '0px 0px 0px 0px' });
+
+  els.forEach(el => obs.observe(el));
+
+  // Also immediately reveal elements already in the viewport on load
+  requestAnimationFrame(() => {
+    els.forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        el.classList.add('in');
+      }
+    });
+  });
 })();
 
 /* ═══════════════════════════════════════════
