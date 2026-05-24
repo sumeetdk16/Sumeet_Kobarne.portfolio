@@ -1,16 +1,10 @@
 {
-    "routes": [
-        {
-            "src": "/about",
-            "dest": "/about.html"
-        },
-        {
-            "src": "/projects",
-            "dest": "/projects.html"
-        },
-        {
-            "src": "/(.*)",
-            "dest": "/$1"
-        }
-    ]
+  "buildCommand": null,
+  "outputDirectory": ".",
+  "framework": null,
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/projects", "destination": "/projects.html" },
+    { "source": "/about", "destination": "/about.html" }
+  ]
 }
