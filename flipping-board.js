@@ -1,102 +1,92 @@
 // Split-flap display — improved with scramble + left-to-right typing
 (function () {
-  const COLS          = 18;
-  const ROWS          = 3;
-  const HOLD_MS       = 6200; // 3200 + 3000 extra
-  const TILE_DELAY    = 36;   // ms between column starts (typing speed)
-  const SCRAMBLE_STEPS = window.innerWidth < 768 ? 1 : 2; // fewer steps on mobile
-  const SCRAMBLE_FLIP  = 80;  // ms per scramble flip  (matches CSS .scrambling)
-  const FINAL_FLIP     = 200; // ms for the real character (matches CSS .flipping)
+  const COLS = 18;
+  const ROWS = 3;
+  const HOLD_MS = 4500; // Hold each message longer for better readability
+  const TILE_DELAY = 32;   // Slightly faster typing for smoother feel
+  const SCRAMBLE_STEPS = window.innerWidth < 768 ? 1 : 3; // More scramble for drama
+  const SCRAMBLE_FLIP = 70;  // Faster scramble
+  const FINAL_FLIP = 180; // Slightly faster final flip
   const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789*+-=#@';
 
   const MESSAGES = [
+    // ── Classic wisdom ──
     [' STAY  HUNGRY  ', ' STAY  FOOLISH  ', '  - STEVE JOBS  '],
     [' TALK IS CHEAP ', ' SHOW  ME  THE  ', '      CODE      '],
-    ['  MAKE IT WORK ', ' MAKE  IT RIGHT ', '  MAKE IT FAST  '],
-    // ['  FIRST SOLVE  ', '   THE PROBLEM  ', '  THEN CODE IT  '],
     ['  SIMPLICITY   ', '   IS THE SOUL  ', '  OF EFFICIENCY '],
-    // [' SHIP IT EARLY ', ' SHIP  IT OFTEN ', '  LEARN FASTER  '],
-    ['  EVERY EXPERT ', '   WAS ONCE A   ', '    BEGINNER    '],
-    // ['  CLEAN  CODE  ', '  CLEAR  MIND   ', ' GREAT  PRODUCT '],
-    // ['  DEBUG TWICE  ', '  DEPLOY  ONCE  ', '   SLEEP WELL   '],
-    // [' READ THE DOCS ', '  WRITE  TESTS  ', '  SHIP  BOLDLY  '],
-    // ['  CONSISTENCY  ', '     BEATS      ', '     TALENT     '],
-    ['  ONE  COMMIT  ', '   AT  A  TIME  ', ' MOVES MOUNTAINS'],
-    ['  DARE TO BEGIN', '  DARE  TO FAIL ', '  DARE  TO WIN  '],
-    // ['  LEARN ALWAYS ', '   GROW  DAILY  ', '  NEVER SETTLE  '],
-    // [' CODE  IS CRAFT', '  DESIGN IS ART ', '  - SUMEET  K   '],
-    // ['  THINK DEEPLY ', '   ACT  BOLDLY  ', '  BUILD THINGS  '],
-    // ['  GREAT  CODE  ', '   IS WRITTEN   ', '   FOR HUMANS   '],
-    ['  WHEN YOU KNOW ', '   WHAT TO BUILD ', '  BUILD IT NOW  '],
-    ['  THE BEST BUG ', '   IS THE ONE   ', '  YOU PREVENT   '],
-    ['  BUILD THINGS ', '  PEOPLE  LOVE  ', '  NOT JUST USE  '],
-    // ['  NEVER  STOP  ', '    LEARNING    ', '     ALWAYS     '],
-    ['  WRITE  CODE  ', '  AS IF THE NEXT', '  DEV IS YOU    '],
-    // ['  FALL  SEVEN  ', '   RISE  EIGHT  ', '  - JAPANESE    '],
-    ['  WORK  HARD   ', '  STAY HUMBLE   ', '  KEEP CODING   '],
-    ['  PROBLEMS ARE ', '  JUST PUZZLES  ', '  IN DISGUISE   '],
-
-    // ── New messages ──────────────────────────────────────────────
-    // Move fast — Zuckerberg
-    ['   MOVE FAST    ', '  BREAK THINGS  ', '   - MARK Z.    '],
-    // Mandela
-    [' IT ALWAYS SEEMS', ' IMPOSSIBLE UNTIL', '   IT IS DONE   '],
-    // Knuth — premature optimisation
-    [' PREMATURE OPT  ', '  IS ROOT OF ALL', '      EVIL      '],
-    // DRY principle
-    ["  DON'T REPEAT  ", '   YOURSELF     ', '  DRY PRINCIPLE '],
-    // KISS
-    ['  KEEP IT SIMPLE', '   AND STUPID   ', '  KISS PRINCIPLE'],
-    // Good code = good docs
-    ['  GOOD CODE IS  ', '  ITS OWN BEST  ', ' DOCUMENTATION  '],
-    // Single responsibility
-    ['  ONE FUNCTION  ', '    ONE JOB     ', '   DO IT WELL   '],
-    // Navy SEAL / slow is smooth
-    [' SLOW IS SMOOTH ', ' SMOOTH IS FAST ', '  TRUST THE REP '],
-    // Build for users
-    [' BUILD FOR USERS', '   NOT FOR YOUR ', '   PORTFOLIO    '],
-    // Commit hygiene
-    ['  COMMIT EARLY  ', '  COMMIT OFTEN  ', '  PUSH ALWAYS   '],
-    // On the shoulders of giants
-    [' STANDING ON THE', ' SHOULDERS OF   ', '    GIANTS      '],
-    // Iterate
-    ['  ITERATE FAST  ', '   FAIL OFTEN   ', '  LEARN ALWAYS  '],
-    // Ownership
-    ['  OWN YOUR CODE ', '  OWN YOUR BUGS ', '  OWN YOUR WINS '],
-    // Security mindset
-    [' SECURITY IS NOT', ' A FEATURE BUT  ', '   A MINDSET    '],
-    // Innovation — Steve Jobs
-    [' INNOVATION IS  ', '  SAYING NO TO  ', '  1000 THINGS   '],
-    // Code review
-    ['  CODE REVIEW IS', '  A GIFT NOT A  ', '  PUNISHMENT    '],
-    // Documentation as love letter
-    [' DOCUMENTATION  ', '  IS A LETTER   ', '  TO FUTURE YOU '],
-    // Naming is hard — Knuth
-    ['  NAMING THINGS ', '  IS THE HARDEST', '  PART OF CODE  '],
-    // Automate
-    [' AUTOMATE THE   ', '   BORING STUFF ', '  BUILD THE COOL'],
-    // Version control
-    ['VERSION CONTROL ', '   IS YOUR BEST ', '   SAFETY NET   '],
-    // Open source
-    ['  OPEN SOURCE   ', '   IS THE FUTURE', '   OF TECH      '],
-    // Measure twice
-    ['  MEASURE TWICE ', '   CUT ONCE     ', '  DEPLOY ONCE   '],
-    // Write for humans — SICP
-    ['  WRITE CODE FOR', '   THE NEXT DEV ', '  WHO READS IT  '],
-    // Tests = sleep
-    [' WRITE TESTS NOW', '  SLEEP SOUNDLY ', '  SHIP BOLDLY   '],
-    // APIs
-    ['  API FIRST THEN', '   BUILD THE UI ', '  THANK YOURSELF'],
-    // Debugging
-    ['  DEBUGGING IS  ', '  TWICE AS HARD ', '  AS WRITING IT '],
-    // Complexity
-    [' COMPLEXITY KILLS', '  SIMPLICITY    ', '    SCALES      '],
-    // Grit
-    ['   FALL SEVEN   ', '    RISE EIGHT  ', '  KEEP PUSHING  '],
-    // Pipeline
-    ['   CI / CD IS   ', '  NOT A LUXURY  ', '    A HABIT     '],
-
+    ['  DONE IS BETTER', '   THAN PERFECT ', '    - SHERYL S. '],
     
+    // ── Growth mindset ──
+    ['  EVERY EXPERT ', '   WAS ONCE A   ', '    BEGINNER    '],
+    ['  CONSISTENCY  ', '     BEATS      ', '     TALENT     '],
+    ['  DARE TO BEGIN', '  DARE  TO FAIL ', '  DARE  TO WIN  '],
+    [' IT ALWAYS SEEMS', ' IMPOSSIBLE UNTIL', '   IT IS DONE   '],
+    ['  LEARN ALWAYS  ', '   GROW  DAILY  ', '  NEVER SETTLE  '],
+    
+    // ── Execution & shipping ──
+    ['  GET SHIT DONE ', '  - MIGUEL G.   ', '   SHIP IT NOW  '],
+    ['   MOVE FAST    ', '  BREAK THINGS  ', '   - MARK Z.    '],
+    ['  SHIPPING IS   ', '  THE BEST WAY  ', '   TO LEARN     '],
+    ['  BUILD THINGS  ', '  PEOPLE  LOVE  ', '  NOT JUST USE  '],
+    ['  ITERATE FAST  ', '   FAIL OFTEN   ', '  LEARN ALWAYS  '],
+    
+    // ── Code quality ──
+    ['  WRITE  CODE   ', '  AS IF THE NEXT', '  DEV IS YOU    '],
+    ['  GOOD CODE IS  ', '  ITS OWN BEST  ', ' DOCUMENTATION  '],
+    ['  ONE FUNCTION  ', '    ONE JOB     ', '   DO IT WELL   '],
+    ["  DON'T REPEAT  ", '   YOURSELF     ', '  DRY PRINCIPLE '],
+    ['  KEEP IT SIMPLE', '   AND STUPID   ', '  KISS PRINCIPLE'],
+    
+    // ── Testing & reliability ──
+    [' WRITE TESTS NOW', '  SLEEP SOUNDLY ', '  SHIP BOLDLY   '],
+    ['  THE BEST BUG  ', '   IS THE ONE   ', '  YOU PREVENT   '],
+    ['  DEBUGGING IS  ', '  TWICE AS HARD ', '  AS WRITING IT '],
+    ['VERSION CONTROL ', '   IS YOUR BEST ', '   SAFETY NET   '],
+    
+    // ── Innovation & creativity ──
+    [' INNOVATION IS  ', '  SAYING NO TO  ', '  1000 THINGS   '],
+    ['  WHEN YOU KNOW ', '   WHAT TO BUILD', '  BUILD IT NOW  '],
+    [' BUILD FOR USERS', '   NOT FOR YOUR ', '   PORTFOLIO    '],
+    ['  PROBLEMS ARE  ', '  JUST PUZZLES  ', '  IN DISGUISE   '],
+    
+    // ── Mindset & philosophy ──
+    [' SLOW IS SMOOTH ', ' SMOOTH IS FAST ', '  TRUST PROCESS '],
+    ['  OWN YOUR CODE ', '  OWN YOUR BUGS ', '  OWN YOUR WINS '],
+    [' SECURITY IS NOT', ' A FEATURE BUT  ', '   A MINDSET    '],
+    [' COMPLEXITY KILLS', '  SIMPLICITY    ', '    SCALES      '],
+    
+    // ── Collaboration ──
+    ['  CODE REVIEW IS', '  A GIFT NOT A  ', '  PUNISHMENT    '],
+    [' STANDING ON THE', ' SHOULDERS OF   ', '    GIANTS      '],
+    ['  OPEN SOURCE   ', '   IS THE FUTURE', '   OF TECH      '],
+    [' DOCUMENTATION  ', '  IS A LETTER   ', '  TO FUTURE YOU '],
+    
+    // ── Best practices ──
+    ['  COMMIT EARLY  ', '  COMMIT OFTEN  ', '  PUSH ALWAYS   '],
+    ['   CI / CD IS   ', '  NOT A LUXURY  ', '    A HABIT     '],
+    ['  API FIRST THEN', '   BUILD THE UI ', '  THANK YOURSELF'],
+    ['  MEASURE TWICE ', '   CUT ONCE     ', '  DEPLOY ONCE   '],
+    
+    // ── Wisdom & craft ──
+    ['  NAMING THINGS ', '  IS THE HARDEST', '  PART OF CODE  '],
+    [' PREMATURE OPT  ', '  IS ROOT OF ALL', '      EVIL      '],
+    [' AUTOMATE THE   ', '   BORING STUFF ', '  BUILD THE COOL'],
+    ['  WORK  HARD    ', '  STAY HUMBLE   ', '  KEEP CODING   '],
+    
+    // ── New motivational additions ──
+    ['  MAKE IT WORK  ', ' MAKE  IT RIGHT ', '  MAKE IT FAST  '],
+    ['  FIRST SOLVE   ', '   THE PROBLEM  ', '  THEN CODE IT  '],
+    ['  ONE  COMMIT   ', '   AT  A  TIME  ', ' MOVES MOUNTAINS'],
+    ['  CODE IS CRAFT ', '  DESIGN IS ART ', '  SHIP IS LOVE  '],
+    ['  THINK DEEPLY  ', '   ACT  BOLDLY  ', '  BUILD THINGS  '],
+    ['  GREAT  CODE   ', '   IS WRITTEN   ', '   FOR HUMANS   '],
+    ['  FALL  SEVEN   ', '   RISE  EIGHT  ', '  - JAPANESE    '],
+    ['  NEVER  STOP   ', '    LEARNING    ', '   IMPROVING    '],
+    ['  INVEST IN     ', '   KNOWLEDGE    ', '  PAYS INTEREST '],
+    ['  BE EXCEPTIONAL', '   IN EVERYTHING', '    YOU DO      '],
+    ['  STRIVE FOR    ', '   EXCELLENCE   ', '  NOT PERFECTION'],
+    ['  WHEN YOU HAVE ', '  A GREAT IDEA  ', '  RUN WITH IT   '],
+    ['  INNOVATION >  ', '  IMPERFECT  >  ', '   INCOMPLETE   '],
   ];
 
   function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
@@ -104,7 +94,7 @@
   function pad(str, len) {
     const s = String(str).toUpperCase();
     if (s.length >= len) return s.slice(0, len);
-    const left  = Math.floor((len - s.length) / 2);
+    const left = Math.floor((len - s.length) / 2);
     const right = len - s.length - left;
     return ' '.repeat(left) + s + ' '.repeat(right);
   }
@@ -160,7 +150,7 @@
       setTimeout(() => {
         tile.classList.remove('flipping', 'scrambling');
         front.textContent = char;
-        back.textContent  = char;
+        back.textContent = char;
         resolve();
       }, duration);
     });
@@ -192,7 +182,7 @@
     for (let c = 0; c < COLS; c++) {
       const delay = c * TILE_DELAY;
       for (let r = 0; r < ROWS; r++) {
-        const char    = padded[r][c];
+        const char = padded[r][c];
         const tileObj = grid[r][c];
         all.push(sleep(delay).then(() => flipTile(tileObj, char)));
       }

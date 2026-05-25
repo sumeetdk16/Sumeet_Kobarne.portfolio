@@ -3902,10 +3902,12 @@ html.theme-transitioning .hero .h-xl.shiny-text {
   background: linear-gradient(180deg, #212121 0%, #0e0e0e 52%, #141414 100%);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 3px;
-  color: rgba(255, 255, 255, 0.96);
+  color: rgba(255, 255, 255, 0.98);
   font-family: var(--mono);
   font-size: 12px;
   font-weight: 700;
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 8px rgba(249, 115, 22, 0.3), 0 1px 2px rgba(0, 0, 0, 0.8);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   overflow: hidden;
@@ -3953,20 +3955,20 @@ html.theme-transitioning .hero .h-xl.shiny-text {
   100% { transform: rotateX(0deg);  }
 }
 
-/* Final character flip — 100ms + 100ms = 200ms */
+/* Final character flip — 90ms + 90ms = 180ms (smoother) */
 .flip-tile.flipping .flip-front {
-  animation: flipFrontOut 0.10s cubic-bezier(0.55, 0, 1, 0.45) forwards;
+  animation: flipFrontOut 0.09s cubic-bezier(0.55, 0, 1, 0.45) forwards;
 }
 .flip-tile.flipping .flip-back {
-  animation: flipBackIn  0.10s cubic-bezier(0, 0.55, 0.45, 1) 0.10s forwards;
+  animation: flipBackIn  0.09s cubic-bezier(0, 0.55, 0.45, 1) 0.09s forwards;
 }
 
-/* Scramble flip — 40ms + 40ms = 80ms (fast wheel spin) */
+/* Scramble flip — 35ms + 35ms = 70ms (faster wheel spin) */
 .flip-tile.scrambling .flip-front {
-  animation: flipFrontOut 0.04s linear forwards;
+  animation: flipFrontOut 0.035s linear forwards;
 }
 .flip-tile.scrambling .flip-back {
-  animation: flipBackIn  0.04s linear 0.04s forwards;
+  animation: flipBackIn  0.035s linear 0.035s forwards;
 }
 
 /* Responsive */
