@@ -3131,6 +3131,13 @@ html.theme-transitioning .hero .h-xl.shiny-text {
   min-height: clamp(220px, 40vw, 380px);
 }
 
+/* Hide gradient lines box on tablets and mobile (laptop only) */
+@media (max-width: 1024px) {
+  .contact-image-wrap {
+    display: none;
+  }
+}
+
 /* ── Stats — fluid gap ────────────────────── */
 .stats {
   gap: clamp(16px, 4vw, 40px);
