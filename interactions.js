@@ -96,7 +96,8 @@
 /* ── 4. HERO FLOATING PARTICLES ─────────── */
 (function () {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  if (window.innerWidth < 768) return;
+  // Desktop only — particles are a visual luxury, not worth the GPU cost on touch devices
+  if (window.innerWidth < 1024) return;
 
   const hero = document.querySelector('.hero');
   if (!hero) return;
@@ -109,112 +110,113 @@
     'opacity:0.55',
   ].join(';');
   hero.appendChild(canvas);
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext('2d', { alpha: true });
 
   let W, H, dpr;
   function resize() {
-    dpr = window.devicePixelRatio || 1;
+    dpr = Math.min(window.devicePixelRatio || 1, 2); // cap DPR at 2
     W   = hero.offsetWidth;
     H   = hero.offsetHeight;
     canvas.width  = W * dpr;
     canvas.height = H * dpr;
     canvas.style.width  = W + 'px';
     canvas.style.height = H + 'px';
-    ctx.scale(dpr, dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
   resize();
-  window.addEventListener('resize', resize);
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(resize, 150); // debounce resize
+  });
 
   const COLORS = ['#fb923c', '#facc15', '#f472b6', '#a78bfa'];
-  const COUNT  = 28;
+  const COUNT  = 18; // reduced from 28
 
   const mouse = { x: W / 2, y: H / 2 };
   window.addEventListener('mousemove', e => {
     const rect = hero.getBoundingClientRect();
     mouse.x = e.clientX - rect.left;
     mouse.y = e.clientY - rect.top;
-  });
+  }, { passive: true });
 
   const particles = Array.from({ length: COUNT }, () => ({
     x:    Math.random() * 1200,
     y:    Math.random() * 700,
-    r:    Math.random() * 2.5 + 0.8,
-    vx:   (Math.random() - 0.5) * 0.35,
-    vy:   (Math.random() - 0.5) * 0.35,
+    r:    Math.random() * 2.2 + 0.8,
+    vx:   (Math.random() - 0.5) * 0.3,
+    vy:   (Math.random() - 0.5) * 0.3,
     color: COLORS[Math.floor(Math.random() * COLORS.length)],
-    alpha: Math.random() * 0.5 + 0.2,
+    alpha: Math.random() * 0.45 + 0.18,
     pulse: Math.random() * Math.PI * 2,
   }));
 
-  function draw() {
+  // 30fps cap — particles don't need 60fps
+  let lastTs = 0;
+  let paused = false;
+
+  function draw(ts) {
     requestAnimationFrame(draw);
+    if (paused) return;
+    if (ts - lastTs < 33) return; // ~30fps
+    lastTs = ts;
+
     ctx.clearRect(0, 0, W, H);
+    const t = ts * 0.001;
 
-    const t = performance.now() * 0.001;
-
+    // Update + draw particles — no shadowBlur (huge GPU cost eliminated)
     particles.forEach(p => {
-      // Gentle mouse attraction
       const dx = mouse.x - p.x;
       const dy = mouse.y - p.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < 200) {
-        p.vx += (dx / dist) * 0.012;
-        p.vy += (dy / dist) * 0.012;
+      if (dist < 180 && dist > 0) {
+        p.vx += (dx / dist) * 0.01;
+        p.vy += (dy / dist) * 0.01;
       }
-
-      // Dampen velocity
       p.vx *= 0.98;
       p.vy *= 0.98;
-
-      p.x += p.vx;
-      p.y += p.vy;
-
-      // Wrap edges
+      p.x  += p.vx;
+      p.y  += p.vy;
       if (p.x < -10) p.x = W + 10;
       if (p.x > W + 10) p.x = -10;
       if (p.y < -10) p.y = H + 10;
       if (p.y > H + 10) p.y = -10;
 
-      // Pulsing alpha
-      const alpha = p.alpha * (0.7 + 0.3 * Math.sin(t * 1.5 + p.pulse));
-
-      ctx.save();
+      const alpha = p.alpha * (0.7 + 0.3 * Math.sin(t * 1.4 + p.pulse));
       ctx.globalAlpha = alpha;
       ctx.fillStyle   = p.color;
-      ctx.shadowColor = p.color;
-      ctx.shadowBlur  = p.r * 4;
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
       ctx.fill();
-      ctx.restore();
     });
 
-    // Draw faint connecting lines between nearby particles
+    // Connecting lines — single pass, no ctx.save/restore per line
+    ctx.lineWidth = 0.5;
     for (let i = 0; i < particles.length; i++) {
       for (let j = i + 1; j < particles.length; j++) {
         const dx   = particles[i].x - particles[j].x;
         const dy   = particles[i].y - particles[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 90) {
-          ctx.save();
-          ctx.globalAlpha = (1 - dist / 90) * 0.12;
+        const d2   = dx * dx + dy * dy; // avoid sqrt unless close
+        if (d2 < 8100) { // 90² = 8100
+          ctx.globalAlpha = (1 - Math.sqrt(d2) / 90) * 0.1;
           ctx.strokeStyle = particles[i].color;
-          ctx.lineWidth   = 0.6;
           ctx.beginPath();
           ctx.moveTo(particles[i].x, particles[i].y);
           ctx.lineTo(particles[j].x, particles[j].y);
           ctx.stroke();
-          ctx.restore();
         }
       }
     }
+    ctx.globalAlpha = 1;
   }
 
-  draw();
+  requestAnimationFrame(draw);
 
-  // Pause when hero is not visible
+  // Truly pause rAF work when hero is scrolled out of view
   const heroObs = new IntersectionObserver(entries => {
-    canvas.style.display = entries[0].isIntersecting ? 'block' : 'none';
+    paused = !entries[0].isIntersecting;
+    canvas.style.display = paused ? 'none' : 'block';
   }, { threshold: 0 });
   heroObs.observe(hero);
 })();

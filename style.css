@@ -804,7 +804,9 @@ html.theme-transitioning .hero .h-xl.shiny-text {
 .lwt-wrap { position: relative; z-index: 1; }
 
 .lwt-eyebrow {
-  display: inline-block;
+  display: block;        /* was inline-block — block guarantees its own line */
+  width: 100%;
+  text-align: center;
   font-family: var(--mono);
   font-size: 10.5px;
   font-weight: 500;
@@ -3987,4 +3989,76 @@ html.theme-transitioning .hero .h-xl.shiny-text {
   .flip-face  { font-size: 8px; }
   .flipping-board { gap: 4px; }
   .flip-row   { gap: 2px; }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   PERFORMANCE OPTIMISATIONS
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Layout containment on repeated card/list elements
+   Stops the browser re-computing the rest of the page
+   when any single card changes size or content.
+   NOTE: .r is intentionally excluded — it's a generic reveal
+   class applied to inline elements too (e.g. eyebrow spans)
+   and contain:layout breaks their normal document flow.      */
+.xp-item, .skill, .plat, .proj-card {
+  contain: layout style;
+}
+
+/* content-visibility removed — iOS Safari has rendering bugs
+   with it (misplaced elements, scroll jump). The IntersectionObserver
+   pauses on canvas elements already handle the real perf win.   */
+
+/* ── Mobile / tablet: cut expensive GPU effects ────────── */
+@media (max-width: 1024px) {
+  /* Halve the blur radius on every backdrop-filter.
+     blur(40px) → blur(16px) saves ~60% of the GPU fill cost. */
+  .nav-pill {
+    backdrop-filter: blur(14px) saturate(150%);
+    -webkit-backdrop-filter: blur(14px) saturate(150%);
+  }
+  .flipping-board-container,
+  .proj-card,
+  .xp-item,
+  .contact-card,
+  .skill-section,
+  .about-glass {
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+  }
+  /* Disable the fixed scroll-progress rail blur */
+  .rail {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+/* ── Phone: remove backdrop-filter entirely ─────────────── */
+@media (max-width: 640px) {
+  .nav-pill,
+  .flipping-board-container,
+  .proj-card,
+  .xp-item,
+  .contact-card {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+/* Prefer GPU-composited properties only.
+   Suppress will-change on elements that don't need it at rest. */
+@media (max-width: 1024px) {
+  .portrait, .portrait-ring {
+    will-change: auto;
+  }
+}
+
+/* Respect the OS-level "reduce motion" preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .ascii-wave-container { display: none; }
 }

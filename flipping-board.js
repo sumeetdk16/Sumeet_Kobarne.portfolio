@@ -4,7 +4,7 @@
   const ROWS          = 3;
   const HOLD_MS       = 6200; // 3200 + 3000 extra
   const TILE_DELAY    = 36;   // ms between column starts (typing speed)
-  const SCRAMBLE_STEPS = 2;   // random chars shown before landing
+  const SCRAMBLE_STEPS = window.innerWidth < 768 ? 1 : 2; // fewer steps on mobile
   const SCRAMBLE_FLIP  = 80;  // ms per scramble flip  (matches CSS .scrambling)
   const FINAL_FLIP     = 200; // ms for the real character (matches CSS .flipping)
   const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789*+-=#@';
