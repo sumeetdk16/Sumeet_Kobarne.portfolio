@@ -24,6 +24,14 @@
     ::view-transition-group(root) {
       animation-duration: ${DURATION}ms;
     }
+    /* Ensure the new state is visible during transition */
+    ::view-transition-new(root) {
+      animation: none;
+    }
+    ::view-transition-old(root) {
+      animation: none;
+      z-index: 1;
+    }
   `;
   document.head.appendChild(styleReset);
 
@@ -164,7 +172,9 @@
       return;
     }
 
+    // Start the transition and update DOM synchronously
     const transition = document.startViewTransition(() => {
+      // These updates happen synchronously and are captured by the transition
       root.setAttribute('data-theme', newDark ? 'dark' : 'light');
       if (newDark) {
         root.classList.add('dark');
@@ -175,8 +185,13 @@
       syncIcons();
     });
 
-    await transition.ready;
-    runAnimation(btn);
+    // Wait for transition to be ready, then run custom animation
+    try {
+      await transition.ready;
+      runAnimation(btn);
+    } catch (e) {
+      // Transition was skipped or failed, that's ok
+    }
   }
 
   // ── Wire up all theme buttons ────────────────────────────────────────
