@@ -179,86 +179,132 @@ import {
 
   if (btn) btn.innerHTML = saved === 'dark' ? ICON_SUN : ICON_MOON;
 
-  window.__setTheme = function (t) {
-    // Add transitioning class to coordinate all theme changes
-    html.classList.add('theme-transitioning');
-    
-    html.dataset.theme = t;
-    localStorage.setItem(KEY, t);
-    const b = document.getElementById('theme-btn');
-    if (b) b.innerHTML = t === 'dark' ? ICON_SUN : ICON_MOON;
+  window.__setTheme = function (t, triggerEl) {
+    // ── Round Morph via View Transition API ──────────────────────
+    function applyTheme() {
+      // Add transitioning class to coordinate all theme changes
+      html.classList.add('theme-transitioning');
 
-    // Update fallback gradient background on the shader wrapper
-    const shaderWrapper = document.getElementById('hero-shader');
-    if (shaderWrapper) {
-      const fallbackGradient = t === 'light'
-        ? 'radial-gradient(ellipse at 30% 40%, rgba(251, 146, 60, 0.08) 0%, rgba(250, 204, 21, 0.05) 25%, rgba(244, 114, 182, 0.04) 50%, transparent 70%)'
-        : 'radial-gradient(ellipse at 30% 40%, rgba(251, 146, 60, 0.15) 0%, rgba(250, 204, 21, 0.1) 25%, rgba(244, 114, 182, 0.08) 50%, transparent 70%)';
-      shaderWrapper.style.background = fallbackGradient;
+      html.dataset.theme = t;
+      localStorage.setItem(KEY, t);
+      const b = document.getElementById('theme-btn');
+      if (b) b.innerHTML = t === 'dark' ? ICON_SUN : ICON_MOON;
+
+      // Update fallback gradient background on the shader wrapper
+      const shaderWrapper = document.getElementById('hero-shader');
+      if (shaderWrapper) {
+        const fallbackGradient = t === 'light'
+          ? 'radial-gradient(ellipse at 30% 40%, rgba(251, 146, 60, 0.08) 0%, rgba(250, 204, 21, 0.05) 25%, rgba(244, 114, 182, 0.04) 50%, transparent 70%)'
+          : 'radial-gradient(ellipse at 30% 40%, rgba(251, 146, 60, 0.15) 0%, rgba(250, 204, 21, 0.1) 25%, rgba(244, 114, 182, 0.08) 50%, transparent 70%)';
+        shaderWrapper.style.background = fallbackGradient;
+      }
+
+      // Update shader background colour
+      if (window.__shaderMount && window.__getShaderColor) {
+        try {
+          if (window.__shaderBgRaf) {
+            cancelAnimationFrame(window.__shaderBgRaf);
+            window.__shaderBgRaf = null;
+          }
+          const targetBg = t === 'light'
+            ? window.__getShaderColor('hsl(30, 33%, 96%)')
+            : window.__getShaderColor('hsl(0, 0%, 0%)');
+          const snapBg = window.__shaderCurrentBg
+            ? [...window.__shaderCurrentBg]
+            : (t === 'light'
+                ? window.__getShaderColor('hsl(0, 0%, 0%)')
+                : window.__getShaderColor('hsl(30, 33%, 96%)'));
+          const duration = 500;
+          const startTime = performance.now();
+          function forceSetColorBack(color) {
+            const sm = window.__shaderMount;
+            if (!sm) return;
+            if (sm.uniformCache) sm.uniformCache['u_colorBack'] = null;
+            sm.setUniforms({ u_colorBack: color });
+          }
+          function animateShaderBg(now) {
+            const progress = Math.min((now - startTime) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const interpolated = snapBg.map((v, i) => v + (targetBg[i] - v) * eased);
+            window.__shaderCurrentBg = [...interpolated];
+            forceSetColorBack(interpolated);
+            if (progress < 1) {
+              window.__shaderBgRaf = requestAnimationFrame(animateShaderBg);
+            } else {
+              window.__shaderBgRaf = null;
+              window.__shaderCurrentBg = [...targetBg];
+              forceSetColorBack(targetBg);
+            }
+          }
+          window.__shaderBgRaf = requestAnimationFrame(animateShaderBg);
+        } catch (e) {
+          console.warn('Failed to update shader theme:', e);
+        }
+      }
+
+      setTimeout(() => { html.classList.remove('theme-transitioning'); }, 500);
     }
 
-    // Update shader background colour — cancel any in-flight animation first
-    if (window.__shaderMount && window.__getShaderColor) {
-      try {
-        // Cancel previous animation frame if one is running
-        if (window.__shaderBgRaf) {
-          cancelAnimationFrame(window.__shaderBgRaf);
-          window.__shaderBgRaf = null;
+    // Use View Transition API for Round Morph if supported
+    if (!document.startViewTransition || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      applyTheme();
+      return;
+    }
+
+    // Get button position for the morph origin
+    const btn = triggerEl || document.getElementById('theme-btn');
+    const rect = btn ? btn.getBoundingClientRect() : { left: window.innerWidth / 2, top: 20, width: 34, height: 34 };
+    const cx = Math.round(rect.left + rect.width / 2);
+    const cy = Math.round(rect.top + rect.height / 2);
+
+    // Inject round-morph keyframes once
+    if (!document.getElementById('__round-morph-style')) {
+      const s = document.createElement('style');
+      s.id = '__round-morph-style';
+      s.textContent = `
+        ::view-transition-old(root),
+        ::view-transition-new(root) {
+          animation: none;
+          mix-blend-mode: normal;
         }
-
-        const targetBg = t === 'light'
-          ? window.__getShaderColor('hsl(30, 33%, 96%)')
-          : window.__getShaderColor('hsl(0, 0%, 0%)');
-
-        // Always snapshot the CURRENT live value (updated every frame)
-        const snapBg = window.__shaderCurrentBg
-          ? [...window.__shaderCurrentBg]
-          : (t === 'light'
-              ? window.__getShaderColor('hsl(0, 0%, 0%)')
-              : window.__getShaderColor('hsl(30, 33%, 96%)'));
-
-        const duration = 500;
-        const startTime = performance.now();
-
-        // Force-set u_colorBack by wiping the cache entry first
-        function forceSetColorBack(color) {
-          const sm = window.__shaderMount;
-          if (!sm) return;
-          if (sm.uniformCache) sm.uniformCache['u_colorBack'] = null;
-          sm.setUniforms({ u_colorBack: color });
+        ::view-transition-old(root) {
+          z-index: 1;
         }
-
-        function animateShaderBg(now) {
-          const progress = Math.min((now - startTime) / duration, 1);
-          const eased = 1 - Math.pow(1 - progress, 3);
-          const interpolated = snapBg.map((v, i) => v + (targetBg[i] - v) * eased);
-
-          // Keep live snapshot updated every frame
-          window.__shaderCurrentBg = [...interpolated];
-          forceSetColorBack(interpolated);
-
-          if (progress < 1) {
-            window.__shaderBgRaf = requestAnimationFrame(animateShaderBg);
-          } else {
-            window.__shaderBgRaf = null;
-            window.__shaderCurrentBg = [...targetBg];
-            forceSetColorBack(targetBg);
+        ::view-transition-new(root) {
+          z-index: 9999;
+          animation: round-morph-in var(--vt-duration, 500ms) cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        @keyframes round-morph-in {
+          from {
+            clip-path: var(--vt-clip-from);
+          }
+          to {
+            clip-path: var(--vt-clip-to);
           }
         }
-
-        window.__shaderBgRaf = requestAnimationFrame(animateShaderBg);
-      } catch (e) {
-        console.warn('Failed to update shader theme:', e);
-      }
+      `;
+      document.head.appendChild(s);
     }
-    
-    // Remove transitioning class after transition completes
-    setTimeout(() => {
-      html.classList.remove('theme-transitioning');
-    }, 500);
+
+    // Compute clip-path: start as a small rounded rect around the button, expand to full page
+    const maxDim = Math.max(window.innerWidth, window.innerHeight) * 1.5;
+    const btnW = rect.width + 8;
+    const btnH = rect.height + 8;
+    const bx = cx - btnW / 2;
+    const by = cy - btnH / 2;
+
+    // inset(top right bottom left round radius)
+    const clipFrom = `inset(${by}px ${window.innerWidth - bx - btnW}px ${window.innerHeight - by - btnH}px ${bx}px round ${btnH / 2}px)`;
+    const clipTo   = `inset(0px 0px 0px 0px round 0px)`;
+
+    html.style.setProperty('--vt-clip-from', clipFrom);
+    html.style.setProperty('--vt-clip-to', clipTo);
+    html.style.setProperty('--vt-duration', '520ms');
+
+    document.startViewTransition(applyTheme);
   };
-  if (btn) btn.addEventListener('click', () => {
-    window.__setTheme(html.dataset.theme === 'dark' ? 'light' : 'dark');
+  if (btn) btn.addEventListener('click', (e) => {
+    window.__setTheme(html.dataset.theme === 'dark' ? 'light' : 'dark', e.currentTarget);
   });
 })();
 
@@ -453,9 +499,9 @@ window.handleContactFormSubmit = function (event) {
 
   // Drawer theme button triggers main theme toggle
   if (drawerThemeBtn) {
-    drawerThemeBtn.addEventListener('click', () => {
+    drawerThemeBtn.addEventListener('click', (e) => {
       const html = document.documentElement;
-      window.__setTheme(html.dataset.theme === 'dark' ? 'light' : 'dark');
+      window.__setTheme(html.dataset.theme === 'dark' ? 'light' : 'dark', e.currentTarget);
       syncDrawerThemeIcon();
       closeDrawer();
     });
