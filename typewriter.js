@@ -1,47 +1,36 @@
+/**
+ * Aceternity-style Typewriter Effect
+ * Types out characters one by one inside #typewriter-root.
+ * The parent h1.about-h.shiny-text provides the orange gradient.
+ */
 document.addEventListener("DOMContentLoaded", () => {
-  const element = document.getElementById("typing-name");
-  if (!element) return;
+  const root = document.getElementById("typewriter-root");
+  if (!root) return;
 
-  const strings = JSON.parse(element.getAttribute("data-strings") || '["Sumeet Kobarne"]');
-  const speed = parseInt(element.getAttribute("data-speed") || "80", 10);
-  const deleteSpeed = parseInt(element.getAttribute("data-delete-speed") || "40", 10);
-  const pause = parseInt(element.getAttribute("data-pause") || "2000", 10);
-  
-  let stringIndex = 0;
-  let charIndex = 0;
-  let isDeleting = false;
+  const fullText   = "Hello! I'm Sumeet Kobarne.";
+  const CHAR_DELAY  = 65;   // ms per character
+  const START_DELAY = 400;  // ms before typing begins
 
-  function type() {
-    const currentString = strings[stringIndex];
-    if (isDeleting) {
-      element.textContent = currentString.substring(0, charIndex - 1);
-      charIndex--;
-    } else {
-      element.textContent = currentString.substring(0, charIndex + 1);
-      charIndex++;
-    }
+  // ── Build DOM ─────────────────────────────────────────────────
+  const textNode = document.createElement("span");
+  textNode.className = "tw-text";
+  root.appendChild(textNode);
 
-    let currentSpeed = speed;
+  const cursor = document.createElement("span");
+  cursor.className = "tw-cursor";
+  cursor.setAttribute("aria-hidden", "true");
+  cursor.textContent = "|";
+  root.appendChild(cursor);
 
-    if (!isDeleting && charIndex === currentString.length) {
-      if (strings.length > 1) {
-        currentSpeed = pause;
-        isDeleting = true;
-      } else {
-        // Only one string, finish typing and keep the blinking cursor
-        return;
-      }
-    } else if (isDeleting && charIndex === 0) {
-      isDeleting = false;
-      stringIndex = (stringIndex + 1) % strings.length;
-      currentSpeed = 500; // Pause before typing the next string
-    } else if (isDeleting) {
-      currentSpeed = deleteSpeed;
-    }
+  // ── Type characters ───────────────────────────────────────────
+  let index = 0;
 
-    setTimeout(type, currentSpeed);
+  function typeNext() {
+    if (index >= fullText.length) return; // done
+    textNode.textContent = fullText.substring(0, index + 1);
+    index++;
+    setTimeout(typeNext, CHAR_DELAY);
   }
 
-  // Initial delay before starting the animation
-  setTimeout(type, 500);
+  setTimeout(typeNext, START_DELAY);
 });

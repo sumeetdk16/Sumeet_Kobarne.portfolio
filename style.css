@@ -1889,61 +1889,33 @@ html.theme-transitioning .hero .h-xl.shiny-text {
   .wrap { max-width: 860px; }
 }
 
-/* ── TYPEWRITER TEXT & CURSOR ──────────────── */
-.typing-name {
-  font-family: var(--display);
-  font-weight: 700;
-  color: #ffffff;
-}
-[data-theme="light"] .typing-name {
-  color: #0e0e10;
+/* ── ACETERNITY TYPEWRITER EFFECT ─────────── */
+#typewriter-root {
+  display: inline;
 }
 
-/* Shiny sweep on the name — brighter white-on-white shimmer */
-.typing-name.shiny-text {
-  background: linear-gradient(
-    120deg,
-    rgba(255, 255, 255, 0.75) 20%,
-    rgba(255, 255, 255, 1)    40%,
-    rgba(220, 240, 255, 1)    50%,
-    rgba(255, 255, 255, 1)    60%,
-    rgba(255, 255, 255, 0.75) 80%
-  );
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: shiny-sweep 4s linear infinite;
-  filter: drop-shadow(0 2px 12px rgba(255,255,255,0.25));
+.tw-wrapper {
+  display: inline;
 }
-[data-theme="light"] .typing-name.shiny-text {
-  background: linear-gradient(
-    120deg,
-    rgba(14, 14, 16, 0.6)  20%,
-    rgba(14, 14, 16, 1)    40%,
-    rgba(120, 60, 0, 1)    50%,
-    rgba(14, 14, 16, 1)    60%,
-    rgba(14, 14, 16, 0.6)  80%
-  );
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: shiny-sweep 4s linear infinite;
-  filter: none;
-}
-.typing-cursor {
+
+/* Cursor inherits the gradient color from the parent h1 */
+.tw-cursor {
   display: inline-block;
-  width: 2px;
-  height: 1.1em;
-  background-color: var(--fg);
-  margin-left: 4px;
-  vertical-align: -0.1em;
-  animation: typing-blink 0.75s step-end infinite;
+  margin-left: 2px;
+  font-weight: 300;
+  animation: tw-blink 1.06s step-end infinite;
+  vertical-align: baseline;
+  /* Use a solid colour so it's visible against the gradient text */
+  -webkit-text-fill-color: #F97316;
+  color: #F97316;
 }
-@keyframes typing-blink {
-  from, to { background-color: transparent }
-  50% { background-color: var(--fg) }
+[data-theme="light"] .tw-cursor {
+  -webkit-text-fill-color: #EA580C;
+  color: #EA580C;
+}
+@keyframes tw-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
 }
 
 /* ── SHINY TEXT EFFECT ────────────────────── */
