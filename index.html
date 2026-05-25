@@ -3,6 +3,9 @@
 
 <head>
   <meta charset="UTF-8" />
+  <!-- Theme init: runs synchronously before any module script so shader.js
+       reads the correct data-theme on first access, not the hardcoded default. -->
+  <script>document.documentElement.dataset.theme=localStorage.getItem('rbp-theme')||'dark';</script>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Sumeet Kobarne</title>
   <meta name="description"
@@ -765,6 +768,7 @@
   <script src="magnet-lines.js"></script>
   <script src="variable-proximity.js"></script>
   <script src="interactions.js"></script>
+  <script src="typewriter.js"></script>
   <script src="ascii-wave.js"></script>
   <script src="tubelight-nav.js"></script>
   <script src="hamburger-overlay.js"></script>

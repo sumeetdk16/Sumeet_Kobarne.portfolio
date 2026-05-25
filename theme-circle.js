@@ -45,9 +45,6 @@
         Math.max(y, window.innerHeight - y)
       );
 
-      // Freeze background-clip:text elements to prevent glitch in snapshot
-      document.documentElement.classList.add('vt-in-progress');
-
       var transition = document.startViewTransition(function () {
         _original(t);
       });
@@ -66,12 +63,6 @@
             pseudoElement: '::view-transition-new(root)'
           }
         );
-      });
-
-      transition.finished.then(function () {
-        document.documentElement.classList.remove('vt-in-progress');
-      }).catch(function () {
-        document.documentElement.classList.remove('vt-in-progress');
       });
     };
   }

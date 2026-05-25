@@ -689,26 +689,6 @@ html.theme-transitioning .hero .h-xl.shiny-text {
   transition: opacity 0.3s var(--ease), filter 0.5s var(--ease);
 }
 
-/* ── VIEW TRANSITION GLITCH FIX ─────────────────────────────────────
-   background-clip:text with transparent fill glitches in VT snapshots.
-   While the view transition is active, swap to a solid fill so the
-   snapshot is clean. Restored automatically once transition.finished. */
-html.vt-in-progress .hero .h-xl.shiny-text {
-  -webkit-text-fill-color: var(--fg) !important;
-  background-image: none !important;
-  animation-play-state: paused !important;
-}
-/* Isolate the WebGL shader canvas in its own VT layer so it doesn't
-   bleed particle artefacts into the root snapshot */
-#hero-shader {
-  view-transition-name: hero-shader;
-}
-::view-transition-old(hero-shader),
-::view-transition-new(hero-shader) {
-  animation: none;
-  mix-blend-mode: normal;
-}
-
 /* Portrait */
 .portrait{position:relative;width:280px;height:340px;flex-shrink:0;cursor:pointer}
 .portrait-ring{
@@ -1676,7 +1656,7 @@ html.vt-in-progress .hero .h-xl.shiny-text {
 /* ── HERO NAME (Rengok display font) ─────── */
 .hero-name {
   font-family: var(--display);
-  font-weight: 400;
+  font-weight: 700;
   letter-spacing: 0.02em;
 }
 [data-theme="light"] .hero-name {
@@ -2034,6 +2014,11 @@ html.vt-in-progress .hero .h-xl.shiny-text {
 @keyframes tw-blink {
   0%, 100% { opacity: 1; }
   50%       { opacity: 0; }
+}
+/* Cursor stays solid while actively typing, blinks only during pauses */
+.tw-cursor.tw-typing {
+  animation: none;
+  opacity: 1;
 }
 
 /* ── SHINY TEXT EFFECT ────────────────────── */
@@ -2733,6 +2718,15 @@ html.vt-in-progress .hero .h-xl.shiny-text {
 }
 
 /* Typing cursor */
+.typing-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background-color: rgba(255,255,255,0.85);
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: tw-blink 1.06s step-end infinite;
+}
 [data-theme="light"] .typing-cursor {
   background-color: #0e0e10;
 }
@@ -3886,7 +3880,8 @@ html.vt-in-progress .hero .h-xl.shiny-text {
   position: relative;
   width: 14px;
   height: 22px;
-  perspective: 600px;
+  perspective: 280px;
+  transform-style: preserve-3d;
 }
 
 .flip-face {
@@ -3895,40 +3890,51 @@ html.vt-in-progress .hero .h-xl.shiny-text {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, #1c1c1c 0%, #0e0e0e 100%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(180deg, #212121 0%, #0e0e0e 52%, #141414 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 3px;
-  color: rgba(255, 255, 255, 0.95);
+  color: rgba(255, 255, 255, 0.96);
   font-family: var(--mono);
   font-size: 12px;
   font-weight: 700;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  overflow: hidden;
   box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.07),
-    inset 0 -1px 0 0 rgba(0, 0, 0, 0.5),
-    0 2px 5px rgba(0, 0, 0, 0.5);
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.09),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.6),
+    0 2px 6px rgba(0, 0, 0, 0.55);
 }
 
 [data-theme="light"] .flip-face {
-  background: linear-gradient(180deg, #e8e8e8 0%, #d4d4d4 100%);
+  background: linear-gradient(180deg, #e8e8e8 0%, #d0d0d0 52%, #dadada 100%);
   border-color: rgba(0, 0, 0, 0.12);
   color: rgba(10, 10, 10, 0.95);
   box-shadow:
     inset 0 1px 0 0 rgba(255, 255, 255, 0.9),
-    inset 0 -1px 0 0 rgba(0, 0, 0, 0.08),
-    0 2px 5px rgba(0, 0, 0, 0.08);
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.1),
+    0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.flip-front {
-  transform: rotateX(0deg);
+.flip-front { transform: rotateX(0deg); }
+.flip-back  { transform: rotateX(180deg); }
+
+/* Authentic midline seam — the characteristic split-flap divider */
+.flip-midline {
+  position: absolute;
+  left: 0; right: 0;
+  top: 50%;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.72);
+  z-index: 5;
+  pointer-events: none;
+  transform: translateY(-0.5px);
+}
+[data-theme="light"] .flip-midline {
+  background: rgba(0, 0, 0, 0.22);
 }
 
-.flip-back {
-  transform: rotateX(180deg);
-}
-
-/* Smooth two-phase flip: front folds away, back unfolds in */
+/* ── Flip animations ────────────────────────────────────────── */
 @keyframes flipFrontOut {
   0%   { transform: rotateX(0deg);   }
   100% { transform: rotateX(-90deg); }
@@ -3938,11 +3944,20 @@ html.vt-in-progress .hero .h-xl.shiny-text {
   100% { transform: rotateX(0deg);  }
 }
 
+/* Final character flip — 100ms + 100ms = 200ms */
 .flip-tile.flipping .flip-front {
-  animation: flipFrontOut 0.22s cubic-bezier(0.4, 0, 1, 1) forwards;
+  animation: flipFrontOut 0.10s cubic-bezier(0.55, 0, 1, 0.45) forwards;
 }
 .flip-tile.flipping .flip-back {
-  animation: flipBackIn  0.22s cubic-bezier(0, 0, 0.6, 1) 0.22s forwards;
+  animation: flipBackIn  0.10s cubic-bezier(0, 0.55, 0.45, 1) 0.10s forwards;
+}
+
+/* Scramble flip — 40ms + 40ms = 80ms (fast wheel spin) */
+.flip-tile.scrambling .flip-front {
+  animation: flipFrontOut 0.04s linear forwards;
+}
+.flip-tile.scrambling .flip-back {
+  animation: flipBackIn  0.04s linear 0.04s forwards;
 }
 
 /* Responsive */
