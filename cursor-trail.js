@@ -8,7 +8,7 @@
 
 (function () {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  if (window.innerWidth <= 768) return;
+  if (window.innerWidth <= 1024) return; // Disable on tablets and mobile
 
   /* ── Config (mirrors ReactBits props) ── */
   const CONFIG = {
