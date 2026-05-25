@@ -225,12 +225,12 @@ ul{list-style:none}
   transition: all 0.3s var(--ease), background 0.5s var(--ease), border-color 0.5s var(--ease);
 }
 .nav-pill:hover {
-  background:rgba(5,5,5,0.5);
-  border-color:rgba(251,146,60,0.2);
+  background:rgba(5,5,5,0.55);
+  border-color:rgba(255,255,255,0.1);
   box-shadow:
     inset 0 1px 0 0 rgba(255,255,255,0.12),
     inset 0 -1px 0 0 rgba(0,0,0,0.6),
-    0 12px 40px rgba(251,146,60,0.15),
+    0 12px 40px rgba(0,0,0,0.35),
     0 2px 4px rgba(0,0,0,0.4);
 }
 [data-theme="light"] .nav-pill{
@@ -239,15 +239,15 @@ ul{list-style:none}
 }
 [data-theme="light"] .nav-pill:hover{
   background:rgba(255,255,255,0.65);
-  border-color:rgba(251,146,60,0.15);
+  border-color:rgba(0,0,0,0.08);
 }
 .nav-ind{
   position:absolute;border-radius:100px;
-  background:linear-gradient(135deg, rgba(251,146,60,0.15), rgba(250,204,21,0.15));
+  background:rgba(255,255,255,0.07);
   transition:left .42s var(--spring),top .42s var(--spring),width .42s var(--spring),height .42s var(--spring);
   pointer-events:none
 }
-[data-theme="light"] .nav-ind{background:linear-gradient(135deg, rgba(251,146,60,0.1), rgba(250,204,21,0.1))}
+[data-theme="light"] .nav-ind{background:rgba(0,0,0,0.06)}
 .nav-a{
   position:relative;z-index:1;padding:7px 18px;border-radius:100px;
   font-size:13.5px;font-weight:500;color:rgba(255,255,255,0.5);
@@ -265,9 +265,9 @@ ul{list-style:none}
   transition:color .25s,background .25s,transform .2s var(--spring)
 }
 .theme-btn svg{display:block;flex-shrink:0}
-.theme-btn:hover{color:rgba(255,255,255,0.95);background:linear-gradient(135deg, rgba(251,146,60,0.1), rgba(250,204,21,0.1));transform:rotate(20deg) scale(1.1)}
+.theme-btn:hover{color:rgba(255,255,255,0.95);background:rgba(255,255,255,0.08);transform:rotate(20deg) scale(1.1)}
 [data-theme="light"] .theme-btn{color:rgba(0,0,0,0.6)}
-[data-theme="light"] .theme-btn:hover{color:rgba(0,0,0,0.9);background:linear-gradient(135deg, rgba(251,146,60,0.08), rgba(250,204,21,0.08));transform:rotate(-20deg) scale(1.1)}
+[data-theme="light"] .theme-btn:hover{color:rgba(0,0,0,0.9);background:rgba(0,0,0,0.06);transform:rotate(-20deg) scale(1.1)}
 
 /* ── DIVIDER ─────────────────────────────── */
 .hr{height:1px;background:var(--border);position:relative;z-index:2}
