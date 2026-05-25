@@ -243,19 +243,33 @@ ul{list-style:none}
 }
 .nav-ind{
   position:absolute;border-radius:100px;
-  background:rgba(255,255,255,0.07);
+  background:rgba(255,255,255,0.09);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.12), 0 1px 3px rgba(0,0,0,0.3);
   transition:left .42s var(--spring),top .42s var(--spring),width .42s var(--spring),height .42s var(--spring);
   pointer-events:none
 }
-[data-theme="light"] .nav-ind{background:rgba(0,0,0,0.06)}
+[data-theme="light"] .nav-ind{
+  background:rgba(0,0,0,0.06);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.9), 0 1px 3px rgba(0,0,0,0.06)
+}
 .nav-a{
-  position:relative;z-index:1;padding:7px 18px;border-radius:100px;
-  font-size:13.5px;font-weight:500;color:rgba(255,255,255,0.5);
-  transition:color .25s var(--ease);white-space:nowrap
+  position:relative;z-index:1;
+  display:flex;align-items:center;gap:6px;
+  padding:7px 16px;border-radius:100px;
+  font-size:13px;font-weight:500;color:rgba(255,255,255,0.45);
+  transition:color .25s var(--ease);white-space:nowrap;text-decoration:none
 }
 .nav-a:hover,.nav-a.on{color:rgba(255,255,255,0.95)}
-[data-theme="light"] .nav-a{color:rgba(0,0,0,0.5)}
+[data-theme="light"] .nav-a{color:rgba(0,0,0,0.45)}
 [data-theme="light"] .nav-a:hover,[data-theme="light"] .nav-a.on{color:rgba(0,0,0,0.9)}
+/* Icon inside nav link */
+.nav-icon{
+  width:14px;height:14px;flex-shrink:0;
+  stroke-width:2;
+  opacity:0.7;
+  transition:opacity .25s var(--ease)
+}
+.nav-a:hover .nav-icon,.nav-a.on .nav-icon{opacity:1}
 .nav-sep{width:1px;height:18px;background:rgba(255,255,255,0.08);flex-shrink:0;margin:0 2px}
 [data-theme="light"] .nav-sep{background:rgba(0,0,0,0.08)}
 .theme-btn{
@@ -268,6 +282,69 @@ ul{list-style:none}
 .theme-btn:hover{color:rgba(255,255,255,0.95);background:rgba(255,255,255,0.08);transform:rotate(20deg) scale(1.1)}
 [data-theme="light"] .theme-btn{color:rgba(0,0,0,0.6)}
 [data-theme="light"] .theme-btn:hover{color:rgba(0,0,0,0.9);background:rgba(0,0,0,0.06);transform:rotate(-20deg) scale(1.1)}
+
+/* ── TUBELIGHT NAV ───────────────────────── */
+.nav-tubelight {
+  position: absolute;
+  /* sits just above the top edge of .nav-pill */
+  bottom: calc(100% + 3px);
+  height: 2px;
+  border-radius: 100px;
+  background: #ffffff;
+  pointer-events: none;
+  overflow: visible;
+  /* spring transition — matches .nav-ind timing */
+  transition:
+    left    0.42s cubic-bezier(0.34,1.56,0.64,1),
+    width   0.42s cubic-bezier(0.34,1.56,0.64,1),
+    opacity 0.28s ease;
+  /* Only a crisp tight bar glow — no wide horizontal blob */
+  box-shadow:
+    0 0 3px 1px  rgba(255,255,255,1.0),
+    0 0 7px 2px  rgba(255,255,255,0.75);
+}
+/* Smooth triangular light cone spreading downward */
+.nav-tubelight::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 280%;
+  height: 120px;
+  pointer-events: none;
+  /* Symmetric cone: bright at top-centre, smooth falloff to edges and bottom */
+  background: radial-gradient(
+    ellipse 42% 88% at 50% 0%,
+    rgba(255,255,255,0.60) 0%,
+    rgba(255,255,255,0.32) 22%,
+    rgba(255,255,255,0.10) 52%,
+    rgba(255,255,255,0.02) 72%,
+    transparent 88%
+  );
+  filter: blur(4px);
+}
+/* Light theme — dark charcoal bar + cone */
+[data-theme="light"] .nav-tubelight {
+  background: rgba(10,10,12,0.6);
+  box-shadow:
+    0 0 3px 1px  rgba(0,0,0,0.50),
+    0 0 7px 2px  rgba(0,0,0,0.28);
+}
+[data-theme="light"] .nav-tubelight::after {
+  background: radial-gradient(
+    ellipse 42% 88% at 50% 0%,
+    rgba(0,0,0,0.38) 0%,
+    rgba(0,0,0,0.18) 22%,
+    rgba(0,0,0,0.06) 52%,
+    rgba(0,0,0,0.01) 72%,
+    transparent 88%
+  );
+}
+/* Hide on mobile — pill is hidden there */
+@media (max-width: 600px) {
+  .nav-tubelight { display: none; }
+}
 
 /* ── DIVIDER ─────────────────────────────── */
 .hr{height:1px;background:var(--border);position:relative;z-index:2}
@@ -317,6 +394,14 @@ ul{list-style:none}
 /* ── SHINY TEXT GLOBAL TRANSITION ─────────── */
 .shiny-text {
   transition: filter 0.5s var(--ease);
+}
+
+/* ── CIRCLE-SPREAD VIEW TRANSITION ───────── */
+/* Suppress the default crossfade so our JS clip-path animation runs cleanly */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
 }
 
 /* Smooth transition for all shiny text during theme change */
@@ -602,6 +687,26 @@ html.theme-transitioning .hero .h-xl.shiny-text {
   animation-play-state: paused;
   opacity: 0.95;
   transition: opacity 0.3s var(--ease), filter 0.5s var(--ease);
+}
+
+/* ── VIEW TRANSITION GLITCH FIX ─────────────────────────────────────
+   background-clip:text with transparent fill glitches in VT snapshots.
+   While the view transition is active, swap to a solid fill so the
+   snapshot is clean. Restored automatically once transition.finished. */
+html.vt-in-progress .hero .h-xl.shiny-text {
+  -webkit-text-fill-color: var(--fg) !important;
+  background-image: none !important;
+  animation-play-state: paused !important;
+}
+/* Isolate the WebGL shader canvas in its own VT layer so it doesn't
+   bleed particle artefacts into the root snapshot */
+#hero-shader {
+  view-transition-name: hero-shader;
+}
+::view-transition-old(hero-shader),
+::view-transition-new(hero-shader) {
+  animation: none;
+  mix-blend-mode: normal;
 }
 
 /* Portrait */
@@ -918,6 +1023,19 @@ html.theme-transitioning .hero .h-xl.shiny-text {
 
 /* copy email btn state */
 .copy-ok{background:#16a34a!important;color:#fff!important;border-color:#16a34a!important}
+
+/* ── ASCII WAVE ──────────────────────────── */
+#ascii-wave-container{
+  width:100%;
+  height:128px;
+  overflow:hidden;
+  display:block;
+  background:var(--bg);
+  transition:background 0.5s var(--ease);
+}
+@media(max-width:600px){
+  #ascii-wave-container{height:80px}
+}
 
 /* ── FOOTER ──────────────────────────────── */
 .footer{
@@ -2724,7 +2842,9 @@ html.theme-transitioning .hero .h-xl.shiny-text {
 .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
 .nav-hamburger.open span:nth-child(3) { transform: rotate(-45deg); width: 18px; }
 
-/* Mobile drawer overlay */
+/* ── HAMBURGER MENU OVERLAY ──────────────── */
+
+/* Wrapper — full-screen, z above content but below nav */
 .nav-drawer {
   display: none;
   position: fixed;
@@ -2736,126 +2856,199 @@ html.theme-transitioning .hero .h-xl.shiny-text {
   pointer-events: all;
 }
 
-/* Backdrop */
+/* Backdrop — hidden now; the panel IS the overlay */
 .nav-drawer-backdrop {
+  display: none;
+}
+
+/* Full-screen panel — structured space-between layout */
+.nav-drawer-panel {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(155deg, #6e1c00 0%, #c94200 35%, #ff6500 68%, #ff9200 100%);
+  clip-path: circle(0px at var(--ham-x, calc(100% - 36px)) var(--ham-y, 36px));
+  transition: clip-path 0.62s cubic-bezier(0.77, 0, 0.18, 1);
+  transform: none !important;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  padding: max(64px, calc(52px + env(safe-area-inset-top))) 36px max(52px, calc(44px + env(safe-area-inset-bottom)));
+  overflow: hidden;
+}
+/* Dual radial vignette — bright top-left, dark bottom-right */
+.nav-drawer-panel::before {
+  content: '';
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  opacity: 0;
-  transition: opacity 0.3s var(--ease);
-}
-.nav-drawer.open .nav-drawer-backdrop {
-  opacity: 1;
-}
-[data-theme="light"] .nav-drawer-backdrop {
-  background: rgba(0,0,0,0.3);
+  background:
+    radial-gradient(ellipse 70% 55% at 15% 12%, rgba(255,255,255,0.13) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 85% 90%, rgba(0,0,0,0.22) 0%, transparent 55%);
+  pointer-events: none;
+  z-index: 0;
 }
 
-/* Drawer panel — slides in from top */
-.nav-drawer-panel {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  background: rgba(8,8,8,0.92);
-  backdrop-filter: blur(40px) saturate(180%);
-  -webkit-backdrop-filter: blur(40px) saturate(180%);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  padding: 80px 24px 32px;
-  transform: translateY(-100%);
-  transition: transform 0.4s cubic-bezier(0.34,1.2,0.64,1);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-}
-[data-theme="light"] .nav-drawer-panel {
-  background: rgba(250,248,245,0.95);
-  border-bottom-color: rgba(0,0,0,0.06);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.12);
-}
 .nav-drawer.open .nav-drawer-panel {
+  clip-path: circle(200% at var(--ham-x, calc(100% - 36px)) var(--ham-y, 36px));
+}
+
+/* Hamburger spans turn white over the overlay */
+.nav-hamburger.open span { background: #ffffff; }
+
+/* ── Brand header ───────────────────────── */
+.ham-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.40s var(--ease) 0.08s, transform 0.40s var(--ease) 0.08s;
+}
+.nav-drawer.open .ham-brand {
+  opacity: 1;
   transform: translateY(0);
 }
+.ham-initials {
+  font-family: var(--display);
+  font-size: 26px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.96);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.ham-tagline {
+  font-size: 10.5px;
+  font-family: var(--mono);
+  color: rgba(255,255,255,0.48);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
 
-/* Drawer links */
+/* ── Nav links — numbered with dividers ─── */
 .nav-drawer-links {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  margin-bottom: 24px;
+  align-items: stretch;
+  gap: 0;
+  position: relative;
+  z-index: 1;
 }
 .nav-drawer-link {
   display: flex;
-  align-items: center;
-  padding: 14px 16px;
-  border-radius: 12px;
-  font-size: 17px;
-  font-weight: 500;
-  color: rgba(255,255,255,0.6);
-  font-family: var(--sans);
-  transition: background 0.2s, color 0.2s;
+  align-items: baseline;
+  gap: 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.13);
+  width: 100%;
+  font-size: clamp(38px, 12vw, 58px);
+  font-weight: 700;
+  font-family: var(--headline);
+  color: rgba(255,255,255,0.88);
   text-decoration: none;
+  letter-spacing: -0.025em;
+  line-height: 1;
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.38s var(--ease), transform 0.38s var(--ease),
+              color 0.22s, padding-left 0.28s var(--ease);
+  background: none !important;
 }
-.nav-drawer-link:hover,
-.nav-drawer-link.on {
-  background: rgba(255,255,255,0.06);
-  color: rgba(255,255,255,0.95);
+.nav-drawer-links .nav-drawer-link:first-child {
+  border-top: 1px solid rgba(255,255,255,0.13);
 }
-[data-theme="light"] .nav-drawer-link {
-  color: rgba(0,0,0,0.5);
-}
+.nav-drawer-link.ham-in    { opacity: 1; transform: translateY(0); }
+.nav-drawer-link:hover     { color: #ffffff; padding-left: 6px; }
+.nav-drawer-link.on        { color: #ffffff; background: none !important; }
+/* All theme variants inside orange overlay stay white */
+[data-theme="light"] .nav-drawer-link,
 [data-theme="light"] .nav-drawer-link:hover,
 [data-theme="light"] .nav-drawer-link.on {
-  background: rgba(0,0,0,0.04);
-  color: rgba(0,0,0,0.9);
+  background: none !important;
+  color: rgba(255,255,255,0.88);
 }
-.nav-drawer-link.on {
-  background: linear-gradient(135deg, rgba(251,146,60,0.12), rgba(250,204,21,0.12));
-  color: rgba(255,255,255,0.95);
-}
-[data-theme="light"] .nav-drawer-link.on {
-  background: linear-gradient(135deg, rgba(251,146,60,0.08), rgba(250,204,21,0.08));
-  color: rgba(0,0,0,0.9);
-}
+[data-theme="light"] .nav-drawer-link:hover { color: #ffffff; padding-left: 6px; }
+[data-theme="light"] .nav-drawer-link.on    { color: #ffffff; }
 
-/* Drawer footer — theme toggle */
+/* Number prefix */
+.ham-num {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.40);
+  letter-spacing: 0.06em;
+  align-self: center;
+  flex-shrink: 0;
+  transition: color 0.22s;
+  padding-bottom: 3px;
+}
+.nav-drawer-link:hover .ham-num { color: rgba(255,255,255,0.70); }
+.nav-drawer-link.on    .ham-num { color: rgba(255,255,255,0.60); }
+.ham-label { flex: 1; }
+
+/* ── Footer: social row + theme toggle ──── */
 .nav-drawer-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 16px;
-  border-top: 1px solid rgba(255,255,255,0.06);
+  padding-top: 0;
+  border-top: none;
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.40s var(--ease) 0.42s, transform 0.40s var(--ease) 0.42s;
 }
-[data-theme="light"] .nav-drawer-footer {
-  border-top-color: rgba(0,0,0,0.06);
+.nav-drawer.open .nav-drawer-footer {
+  opacity: 1;
+  transform: translateY(0);
 }
-.nav-drawer-footer span {
-  font-size: 12px;
+.ham-social {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.ham-soc-link {
   font-family: var(--mono);
-  color: var(--muted);
+  font-size: 10.5px;
+  color: rgba(255,255,255,0.48);
+  text-decoration: none;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.11em;
+  transition: color 0.2s;
+}
+.ham-soc-link:hover { color: rgba(255,255,255,0.92); }
+.ham-soc-dot {
+  color: rgba(255,255,255,0.20);
+  font-size: 11px;
+  line-height: 1;
+  user-select: none;
 }
 .nav-drawer-theme-btn {
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.08);
-  color: var(--fg);
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.20);
+  color: #ffffff;
   cursor: pointer;
   transition: background 0.25s, transform 0.2s var(--spring);
 }
 .nav-drawer-theme-btn:hover {
-  background: rgba(251,146,60,0.15);
+  background: rgba(255,255,255,0.24);
   transform: rotate(20deg) scale(1.1);
 }
 [data-theme="light"] .nav-drawer-theme-btn {
-  background: rgba(0,0,0,0.04);
-  border-color: rgba(0,0,0,0.06);
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.20);
+  color: #ffffff;
 }
 
 /* ── Activate hamburger on mobile ─────────── */
@@ -3207,18 +3400,7 @@ html.theme-transitioning .hero .h-xl.shiny-text {
   transform: none;
 }
 
-/* Nav active link — subtle underline dot */
-.nav-a.on::after {
-  content: '';
-  position: absolute;
-  bottom: 4px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: rgba(251, 146, 60, 0.8);
-}
+/* Nav active dot removed — tubelight handles the active state */
 
 /* Smooth focus ring for accessibility */
 :focus-visible {

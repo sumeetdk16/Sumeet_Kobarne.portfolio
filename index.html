@@ -51,9 +51,18 @@
   <nav class="nav" aria-label="Primary navigation">
     <div class="nav-pill">
       <div class="nav-ind" aria-hidden="true"></div>
-      <a class="nav-a on" href="index.html">Home</a>
-      <a class="nav-a" href="projects.html">Projects</a>
-      <a class="nav-a" href="about.html">About</a>
+      <a class="nav-a on" href="index.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Home</span>
+      </a>
+      <a class="nav-a" href="projects.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="6" height="6" rx="1"/><rect x="9" y="3" width="13" height="6" rx="1"/><rect x="2" y="12" width="13" height="6" rx="1"/><rect x="18" y="12" width="4" height="6" rx="1"/></svg>
+        <span>Projects</span>
+      </a>
+      <a class="nav-a" href="about.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        <span>About</span>
+      </a>
       <div class="nav-sep" aria-hidden="true"></div>
       <button class="theme-btn" id="theme-btn" aria-label="Toggle colour theme">☀️</button>
     </div>
@@ -67,13 +76,29 @@
   <div class="nav-drawer" id="nav-drawer" role="dialog" aria-modal="true" aria-label="Navigation menu">
     <div class="nav-drawer-backdrop" id="nav-drawer-backdrop"></div>
     <div class="nav-drawer-panel">
+      <div class="ham-brand">
+        <span class="ham-initials">Sumeet Kobarne</span>
+        <span class="ham-tagline">Full Stack Developer</span>
+      </div>
       <nav class="nav-drawer-links">
-        <a class="nav-drawer-link on" href="index.html">Home</a>
-        <a class="nav-drawer-link" href="projects.html">Projects</a>
-        <a class="nav-drawer-link" href="about.html">About</a>
+        <a class="nav-drawer-link on" href="index.html">
+          <span class="ham-num">1.</span><span class="ham-label">Home</span>
+        </a>
+        <a class="nav-drawer-link" href="projects.html">
+          <span class="ham-num">2.</span><span class="ham-label">Projects</span>
+        </a>
+        <a class="nav-drawer-link" href="about.html">
+          <span class="ham-num">3.</span><span class="ham-label">About</span>
+        </a>
       </nav>
       <div class="nav-drawer-footer">
-        <span>Theme</span>
+        <div class="ham-social">
+          <a href="mailto:kobarne21@gmail.com" class="ham-soc-link">Email</a>
+          <span class="ham-soc-dot" aria-hidden="true">·</span>
+          <a href="https://www.linkedin.com/in/sumeet-kobarne/" target="_blank" rel="noopener" class="ham-soc-link">LinkedIn</a>
+          <span class="ham-soc-dot" aria-hidden="true">·</span>
+          <a href="https://github.com/sumeetdk16" target="_blank" rel="noopener" class="ham-soc-link">GitHub</a>
+        </div>
         <button class="nav-drawer-theme-btn" id="nav-drawer-theme-btn" aria-label="Toggle colour theme"></button>
       </div>
     </div>
@@ -722,6 +747,9 @@
         </div>
       </footer>
 
+      <!-- ASCII Wave -->
+      <div id="ascii-wave-container" aria-hidden="true"></div>
+
     </main>
   </div><!-- /shell -->
 
@@ -737,7 +765,10 @@
   <script src="magnet-lines.js"></script>
   <script src="variable-proximity.js"></script>
   <script src="interactions.js"></script>
-  <script src="draggable-footer.js"></script>
+  <script src="ascii-wave.js"></script>
+  <script src="tubelight-nav.js"></script>
+  <script src="hamburger-overlay.js"></script>
+  <script src="theme-circle.js"></script>
   <script>
     window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
   </script>

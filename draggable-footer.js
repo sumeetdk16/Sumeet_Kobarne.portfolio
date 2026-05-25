@@ -37,14 +37,6 @@ class DraggableFooter {
       
       <div class="footer-card-content">
         <div class="footer-card-left">
-          <div class="footer-card-badge">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M12 6v6l4 2"/>
-            </svg>
-            Open for Opportunities
-          </div>
-          
           <h3 class="footer-card-title">Let's Connect</h3>
           
           <div class="footer-card-links">
