@@ -20,6 +20,9 @@ import {
   const heroSection = document.querySelector('.hero');
   if (!heroSection) return;
 
+  // Disable shader on mobile/tablet for performance (≤1024px)
+  const isMobile = window.innerWidth <= 1024;
+
   /*
    * Mount on a fixed full-viewport div so ShaderMount's ResizeObserver
    * always sees real pixel dimensions. We control visibility via opacity
@@ -44,6 +47,15 @@ import {
   shaderWrapper.style.background = isDarkTheme 
     ? 'radial-gradient(ellipse at 30% 40%, rgba(251, 146, 60, 0.15) 0%, rgba(250, 204, 21, 0.1) 25%, rgba(244, 114, 182, 0.08) 50%, transparent 70%)'
     : 'radial-gradient(ellipse at 30% 40%, rgba(251, 146, 60, 0.08) 0%, rgba(250, 204, 21, 0.05) 25%, rgba(244, 114, 182, 0.04) 50%, transparent 70%)';
+
+  // On mobile, just show the fallback gradient and skip WebGL shader
+  if (isMobile) {
+    requestAnimationFrame(() => {
+      shaderWrapper.style.opacity = '1';
+    });
+    console.log('Paper Shaders: Using fallback gradient on mobile for performance');
+    return;
+  }
 
   // Store color conversion function globally for theme switching
   window.__getShaderColor = getShaderColorFromString;
