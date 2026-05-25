@@ -5,8 +5,8 @@
  * Animation: "circle-spread" (expands from the button outward)
  */
 (function () {
-  const DURATION       = 420;
-  const ANIMATION_TYPE = 'circle-spread'; // change to any supported type below
+  const DURATION       = 350;
+  const ANIMATION_TYPE = 'circle-spread';
 
   // ── Supported types:
   //   circle-spread | round-morph | swipe-left | swipe-right
@@ -21,21 +21,27 @@
       animation: none;
       mix-blend-mode: normal;
     }
+    ::view-transition-group(root) {
+      animation-duration: ${DURATION}ms;
+    }
   `;
   document.head.appendChild(styleReset);
 
   // ── Read persisted theme on load ────────────────────────────────────
   (function applyStoredTheme() {
     const stored = localStorage.getItem('theme');
+    const root = document.documentElement;
     if (stored === 'light') {
-      document.documentElement.setAttribute('data-theme', 'light');
+      root.setAttribute('data-theme', 'light');
+      root.classList.remove('dark');
     } else {
-      document.documentElement.setAttribute('data-theme', 'dark');
+      root.setAttribute('data-theme', 'dark');
+      root.classList.add('dark');
     }
   })();
 
   function isDark() {
-    return document.documentElement.getAttribute('data-theme') !== 'light';
+    return document.documentElement.getAttribute('data-theme') === 'dark';
   }
 
   // ── Update all theme button icons ────────────────────────────────────
@@ -143,17 +149,28 @@
   // ── Toggle handler ───────────────────────────────────────────────────
   async function toggleTheme(btn) {
     const newDark = !isDark();
+    const root = document.documentElement;
 
     // View Transitions API — fall back gracefully if not supported
     if (!document.startViewTransition) {
-      document.documentElement.setAttribute('data-theme', newDark ? 'dark' : 'light');
+      root.setAttribute('data-theme', newDark ? 'dark' : 'light');
+      if (newDark) {
+        root.classList.add('dark');
+      } else {
+        root.classList.remove('dark');
+      }
       localStorage.setItem('theme', newDark ? 'dark' : 'light');
       syncIcons();
       return;
     }
 
     const transition = document.startViewTransition(() => {
-      document.documentElement.setAttribute('data-theme', newDark ? 'dark' : 'light');
+      root.setAttribute('data-theme', newDark ? 'dark' : 'light');
+      if (newDark) {
+        root.classList.add('dark');
+      } else {
+        root.classList.remove('dark');
+      }
       localStorage.setItem('theme', newDark ? 'dark' : 'light');
       syncIcons();
     });
