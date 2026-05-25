@@ -8,7 +8,7 @@ npx vite build
 cp index.html about.html projects.html style.css dist/
 cp cursor-trail.js typewriter.js pixel-canvas.js dist/
 cp magnet-lines.js variable-proximity.js interactions.js dist/
-cp flipping-board.js footer-time.js draggable-footer.js dist/
+cp flipping-board.js footer-time.js draggable-footer.js toggle-theme.js dist/
 cp resume.pdf dist/ 2>/dev/null || true
 cp profile.jpg dist/ 2>/dev/null || true
 cp -r fonts dist/ 2>/dev/null || true
