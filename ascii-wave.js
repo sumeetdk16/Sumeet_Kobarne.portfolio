@@ -3,9 +3,6 @@
  * Reads --bg / --fg CSS variables so it matches dark ↔ light toggle.
  */
 (function () {
-  // Disable on mobile/tablet for performance
-  if (window.innerWidth <= 1024) return;
-  
   function getThemeColors() {
     var style = getComputedStyle(document.documentElement);
     return {
