@@ -1508,6 +1508,7 @@ html.theme-transitioning .hero .h-xl.shiny-text {
 .plat-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:16px}
 .plat-grid > .plat{flex:0 0 clamp(140px,22vw,164px)}
 .plat{
+  position:relative;
   display:flex;flex-direction:column;align-items:center;gap:10px;
   padding:24px 16px;
   background:rgba(5,5,5,0.4);
@@ -1517,19 +1518,54 @@ html.theme-transitioning .hero .h-xl.shiny-text {
   box-shadow:inset 0 1px 0 0 rgba(255,255,255,0.04), 0 8px 24px rgba(0,0,0,0.2);
   transition:all .3s var(--ease);
 }
+
+/* ── Border-glow beam ─────────────────────────────────────────────────────
+   10° conic-gradient cone aimed at the cursor via JS-set --plat-angle.
+   Uses --plat-angle (not --ga) to avoid the @property --ga inherits:false
+   conflict used by the project-card spin effect.
+   Only the 1.5px padding ring is visible (mask-composite: exclude).     */
+.plat::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: calc(var(--r) + 1px);
+  padding: 1.5px;
+  background: conic-gradient(
+    from calc(var(--plat-angle, 0deg) - 5deg),
+    transparent  0deg,
+    #dc2626      2deg,     /* red   — leading edge   */
+    #ff6500      5deg,     /* orange — cone peak      */
+    #facc15      8deg,     /* yellow — trailing edge  */
+    transparent 10deg,    /* 10° total (coneSpread=10) */
+    transparent 360deg
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  opacity: var(--plat-glow-op, 0);
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Hover lift only — border colour change removed (glow ::before handles it) */
 .plat:hover{
   background:rgba(5,5,5,0.55);
-  border-color:rgba(251,146,60,0.3);
   transform:translateY(-4px);
-  box-shadow:inset 0 1px 0 0 rgba(255,255,255,0.08), 0 12px 32px rgba(251,146,60,0.2);
+  box-shadow:inset 0 1px 0 0 rgba(255,255,255,0.08), 0 12px 32px rgba(0,0,0,0.3);
 }
 [data-theme="light"] .plat{
   background:rgba(255,255,255,0.5);border:1px solid rgba(0,0,0,0.04);
   box-shadow:inset 0 1px 0 0 rgba(255,255,255,0.9), 0 8px 24px rgba(0,0,0,0.02);
 }
 [data-theme="light"] .plat:hover{
-  background:rgba(255,255,255,0.7);border-color:rgba(251,146,60,0.2);
-  box-shadow:inset 0 1px 0 0 rgba(255,255,255,0.95), 0 12px 32px rgba(251,146,60,0.1);
+  background:rgba(255,255,255,0.72);
+  box-shadow:inset 0 1px 0 0 rgba(255,255,255,0.95), 0 12px 32px rgba(0,0,0,0.07);
 }
 .plat-ico{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:700}
 .plat-ico img{width:28px;height:28px;object-fit:contain}
@@ -1537,12 +1573,7 @@ html.theme-transitioning .hero .h-xl.shiny-text {
 .plat-handle{font-size:11px;font-family:var(--mono);color:var(--muted)}
 .plat-badge{font-size:10.5px;color:var(--fg-2);background:var(--tag);border:1px solid var(--border);border-radius:100px;padding:3px 10px}
 
-/* Platform accent hovers */
-.lc:hover{border-color:rgba(255,161,22,.35);box-shadow:0 8px 32px rgba(255,161,22,.1)}
-.cc:hover{border-color:rgba(107,167,92,.35);box-shadow:0 8px 32px rgba(107,167,92,.1)}
-.cf:hover{border-color:rgba(26,117,255,.35);box-shadow:0 8px 32px rgba(26,117,255,.1)}
-.gfg:hover{border-color:rgba(22,163,74,.35);box-shadow:0 8px 32px rgba(22,163,74,.1)}
-.cd:hover{border-color:rgba(241,90,34,.35);box-shadow:0 8px 32px rgba(241,90,34,.1)}
+/* Platform accent hovers — border-colour changes removed; ::before glow handles it */
 
 /* ══════════════════════════════════════════
    BORDER GLOW  —  ReactBits style
@@ -1639,21 +1670,7 @@ html.theme-transitioning .hero .h-xl.shiny-text {
 .gl-portrait > .portrait { background: transparent !important; border-radius: var(--r) !important; }
 .gl-portrait > .portrait .portrait-fb { border-radius: var(--r) !important; }
 
-/* Platform card accent glows on hover */
-.gl-lc  { animation-duration: 5s; }
-.gl-lc::after  { background: conic-gradient(from var(--ga), transparent 0%, transparent 60%, rgba(255,161,22,.85) 72%, rgba(255,200,80,.65) 82%, transparent 92%); }
-
-.gl-cc  { animation-duration: 5.5s; }
-.gl-cc::after  { background: conic-gradient(from var(--ga), transparent 0%, transparent 60%, rgba(107,167,92,.85) 72%, rgba(150,220,120,.65) 82%, transparent 92%); }
-
-.gl-cf  { animation-duration: 4.8s; }
-.gl-cf::after  { background: conic-gradient(from var(--ga), transparent 0%, transparent 60%, rgba(26,117,255,.85) 72%, rgba(80,160,255,.65) 82%, transparent 92%); }
-
-.gl-gfg { animation-duration: 5.2s; }
-.gl-gfg::after { background: conic-gradient(from var(--ga), transparent 0%, transparent 60%, rgba(22,163,74,.85) 72%, rgba(80,220,120,.65) 82%, transparent 92%); }
-
-.gl-cd  { animation-duration: 5.3s; }
-.gl-cd::after  { background: conic-gradient(from var(--ga), transparent 0%, transparent 60%, rgba(241,90,34,.85) 72%, rgba(255,140,80,.65) 82%, transparent 92%); }
+/* Platform card accent glows — replaced by border-glow.js + .plat::before */
 
 /* ── HERO NAME (Rengok display font) ─────── */
 .hero-name {
@@ -2060,18 +2077,7 @@ html.theme-transitioning .hero .h-xl.shiny-text {
 }
 
 /* ── SOCIAL HOVER ACCENTS ────────────────── */
-.plat.li:hover {
-  border-color: rgba(10, 102, 194, 0.45) !important;
-  box-shadow: 0 8px 32px rgba(10, 102, 194, 0.15) !important;
-}
-.plat.tw:hover {
-  border-color: rgba(255, 255, 255, 0.35) !important;
-  box-shadow: 0 8px 32px rgba(255, 255, 255, 0.08) !important;
-}
-[data-theme="light"] .plat.tw:hover {
-  border-color: rgba(10, 10, 10, 0.25) !important;
-  box-shadow: 0 8px 32px rgba(10, 10, 10, 0.05) !important;
-}
+/* border-colour overrides removed — ::before glow replaces them */
 
 /* X icon: adapts to theme */
 .x-ico {
