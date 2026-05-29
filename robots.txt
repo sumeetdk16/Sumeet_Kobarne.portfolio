@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sumeetkobarne.vercel.app/sitemap.xml

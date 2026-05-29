@@ -521,20 +521,56 @@ html.theme-transitioning .shiny-text {
 .hero-desc strong { color: var(--fg); font-weight: 700; }
 .hero-ctas{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:28px}
 
-/* ── ROUGH-NOTATION SVG — keep behind text ── */
-/* rough-notation injects an <svg> as a sibling after the annotated span.
-   The h1 uses -webkit-text-fill-color:transparent for the shiny gradient,
-   so any opaque overlay hides the text. We push the SVG behind with z-index
-   and use mix-blend-mode so it tints rather than covers. */
-#hl-fsd, #hl-cp {
+/* ── CP enthusiast — animated underline sweep ── */
+/* Uses ::after so it's completely separate from the shiny text gradient.
+   No external libraries, no SVG injection, no z-index fights.            */
+.cp-underline {
   position: relative;
-  z-index: 1;
+  display: inline;
+  /* The parent h1 sets -webkit-text-fill-color:transparent for its gradient.
+     That propagates to children, making em text invisible.
+     Reset to currentColor so the em renders with the normal text color,
+     which still looks great as part of the heading. */
+  -webkit-text-fill-color: currentColor;
+  color: rgba(255,255,255,0.92);
 }
-#hl-fsd + svg,
-#hl-cp  + svg {
-  z-index: 0 !important;
-  mix-blend-mode: screen;   /* blends orange strokes through the white text */
-  pointer-events: none;
+.cp-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 2.5px;
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg,
+    rgba(251,146,60,0)    0%,
+    rgba(251,146,60,0.9)  20%,
+    rgba(251,146,60,1)    50%,
+    rgba(251,146,60,0.9)  80%,
+    rgba(251,146,60,0)    100%
+  );
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.75s cubic-bezier(0.23, 1, 0.32, 1);
+}
+/* Trigger when JS adds .hl-visible to the parent h1 */
+#hero-h.hl-visible .cp-underline::after {
+  transform: scaleX(1);
+}
+[data-theme="light"] .cp-underline {
+  -webkit-text-fill-color: currentColor;
+  color: rgba(14,14,16,0.88);
+}
+[data-theme="light"] .cp-underline::after {
+  background: linear-gradient(
+    90deg,
+    rgba(194,65,12,0)    0%,
+    rgba(194,65,12,0.85) 20%,
+    rgba(194,65,12,1)    50%,
+    rgba(194,65,12,0.85) 80%,
+    rgba(194,65,12,0)    100%
+  );
 }
 
 /* ── RESUME BUTTON ───────────────────────── */

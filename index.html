@@ -186,8 +186,8 @@
                   data-strings='["Sumeet Kobarne", "Sumeet.kobarne"]' data-speed="80"></span><span
                   class="typing-cursor"></span></span>
               <h1 class="h-xl shiny-text" id="hero-h">
-                <span id="hl-fsd">Full Stack Developer</span><br />
-                &amp; <em><span id="hl-cp">CP enthusiast</span></em>
+                Full Stack Developer<br />
+                &amp; <em class="cp-underline">CP enthusiast</em>
               </h1>
 <p class="hero-desc" style="font-size:15px;line-height:1.78;margin-top:18px;">
                 <strong>CS undergrad at SPPU</strong> building clean web experiences and solving complex problems through code.
@@ -844,69 +844,23 @@
   <script defer src="hamburger-overlay.js"></script>
   <script defer src="theme-circle.js"></script>
   <script defer src="magnetic-button.js"></script>
-  <!-- rough-notation for text highlight effect -->
-  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
   <script>
+    /* Trigger CP underline animation when hero h1 enters viewport */
     (function () {
-      function initHighlights() {
-        var fsd = document.getElementById('hl-fsd');
-        var cp  = document.getElementById('hl-cp');
-        if (!fsd || !cp || !window.RoughNotation) return;
-
-        var isDark = document.documentElement.dataset.theme !== 'light';
-
-        // "Full Stack Developer" — bracket wraps around without covering text
-        var annFsd = RoughNotation.annotate(fsd, {
-          type: 'bracket',
-          color: isDark ? 'rgba(251,146,60,0.9)' : 'rgba(200,80,0,0.85)',
-          strokeWidth: 2.5,
-          animationDuration: 700,
-          iterations: 2,
-          padding: 6,
-          brackets: ['left', 'right'],
-          multiline: false,
-        });
-
-        // "CP enthusiast" — hand-drawn underline
-        var annCp = RoughNotation.annotate(cp, {
-          type: 'underline',
-          color: isDark ? 'rgba(251,146,60,0.95)' : 'rgba(200,80,0,0.9)',
-          strokeWidth: 3,
-          animationDuration: 600,
-          iterations: 2,
-          padding: 4,
-          multiline: false,
-        });
-
-        // Trigger once when the h1 enters the viewport
-        var triggered = false;
+      function init() {
+        var h1 = document.getElementById('hero-h');
+        if (!h1) return;
         var obs = new IntersectionObserver(function (entries) {
-          if (triggered) return;
           if (entries[0].isIntersecting) {
-            triggered = true;
+            h1.classList.add('hl-visible');
             obs.disconnect();
-            // Stagger: bracket first, then underline
-            setTimeout(function () { annFsd.show(); }, 400);
-            setTimeout(function () { annCp.show();  }, 1000);
           }
         }, { threshold: 0.3 });
-
-        obs.observe(fsd);
-
-        // Re-draw on theme change so colors stay correct
-        var themeObs = new MutationObserver(function () {
-          annFsd.remove(); annCp.remove();
-          themeObs.disconnect();
-          setTimeout(initHighlights, 80);
-        });
-        themeObs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+        obs.observe(h1);
       }
-
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initHighlights);
-      } else {
-        initHighlights();
-      }
+        document.addEventListener('DOMContentLoaded', init);
+      } else { init(); }
     })();
   </script>
   <script>
