@@ -349,6 +349,61 @@ ul{list-style:none}
 /* ── DIVIDER ─────────────────────────────── */
 .hr{height:1px;background:var(--border);position:relative;z-index:2}
 
+/* ── Light Rays background effect ─────────────────────────────────────
+   Injected by light-rays.js into every section except .hero.
+   .lr-wrap clips the rays; .lr-ray is each animated beam.             */
+.lr-wrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.lr-ray {
+  position: absolute;
+  top: -8%;
+  transform-origin: top center;
+  transform: translateX(-50%) rotate(var(--lr-rot, 0deg));
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(160, 210, 255, 0.18) 15%,
+    rgba(160, 210, 255, 0.18) 85%,
+    transparent 100%
+  );
+  opacity: 0;
+  animation: lr-pulse ease-in-out infinite;
+  will-change: opacity, transform;
+}
+@keyframes lr-pulse {
+  0%, 100% {
+    opacity: 0;
+    transform: translateX(-50%) rotate(var(--lr-rot, 0deg));
+  }
+  30%, 70% {
+    opacity: var(--lr-op, 0.55);
+    transform: translateX(-50%) rotate(calc(var(--lr-rot, 0deg) + 2deg));
+  }
+}
+/* In light mode rays are barely visible — keep it minimal */
+[data-theme="light"] .lr-ray {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(100, 140, 200, 0.06) 15%,
+    rgba(100, 140, 200, 0.06) 85%,
+    transparent 100%
+  );
+}
+/* section content must sit above the ray layer */
+.sec > *:not(.lr-wrap),
+.lwt-section > *:not(.lr-wrap),
+.connect > *:not(.lr-wrap) {
+  position: relative;
+  z-index: 1;
+}
+/* ─────────────────────────────────────────────────────────────────── */
+
 /* ── SECTION SPACING ─────────────────────── */
 .sec{
   padding:96px 0;
@@ -923,6 +978,29 @@ html.theme-transitioning .hero .h-xl.shiny-text {
 [data-theme="light"] .lwt-btn-secondary:hover {
   background: rgba(255,255,255,0.75);
   border-color: rgba(0,0,0,0.18);
+}
+
+/* ── MAGNETIC BUTTON WRAPPER ─────────────── */
+.magnetic-wrap {
+  /* Larger invisible hit area — pull starts before cursor touches button */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  margin: -20px;
+  cursor: pointer;
+}
+/* GPU-composite the transform so the browser never triggers layout */
+.magnetic-wrap [data-magnetic-inner] {
+  will-change: transform;
+}
+/* Disable the generic lwt-btn:hover translateY — JS drives the transform */
+.magnetic-wrap .lwt-btn:hover {
+  transform: none;
+}
+.magnetic-wrap:hover [data-magnetic-inner].lwt-btn-primary {
+  opacity: .85;
+  box-shadow: 0 6px 20px rgba(0,0,0,.4);
 }
 
 .lwt-links {
@@ -1507,16 +1585,27 @@ html.theme-transitioning .hero .h-xl.shiny-text {
 /* Platforms grid */
 .plat-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:16px}
 .plat-grid > .plat{flex:0 0 clamp(140px,22vw,164px)}
+/* ── Outer wrapper — transparent, just holds the spotlight + inner card ── */
 .plat{
   position:relative;
+  display:flex;flex-direction:column;
+  border-radius:var(--r);
+  transition:transform .3s var(--ease);
+  padding:4px;  /* gap so spotlight peeks around inner card edges */
+}
+/* ── Inner dark card — all visual styling lives here ── */
+.plat-inner{
+  position:relative;
+  z-index:1;
   display:flex;flex-direction:column;align-items:center;gap:10px;
   padding:24px 16px;
-  background:rgba(5,5,5,0.4);
+  background:#0d0d0d;
   border:1px solid rgba(255,255,255,0.06);
-  border-radius:var(--r);text-align:center;
+  border-radius:calc(var(--r) - 3px);text-align:center;
   backdrop-filter:blur(32px) saturate(180%);-webkit-backdrop-filter:blur(32px) saturate(180%);
   box-shadow:inset 0 1px 0 0 rgba(255,255,255,0.04), 0 8px 24px rgba(0,0,0,0.2);
   transition:all .3s var(--ease);
+  flex:1;width:100%;
 }
 
 /* ── Border-glow beam ─────────────────────────────────────────────────────
@@ -1553,20 +1642,40 @@ html.theme-transitioning .hero .h-xl.shiny-text {
   z-index: 1;
 }
 
-/* Hover lift only — border colour change removed (glow ::before handles it) */
+/* Hover lift — on outer wrapper only */
 .plat:hover{
-  background:rgba(5,5,5,0.55);
   transform:translateY(-4px);
+}
+.plat:hover .plat-inner{
+  background:#111113;
   box-shadow:inset 0 1px 0 0 rgba(255,255,255,0.08), 0 12px 32px rgba(0,0,0,0.3);
 }
-[data-theme="light"] .plat{
+[data-theme="light"] .plat-inner{
   background:rgba(255,255,255,0.5);border:1px solid rgba(0,0,0,0.04);
   box-shadow:inset 0 1px 0 0 rgba(255,255,255,0.9), 0 8px 24px rgba(0,0,0,0.02);
 }
-[data-theme="light"] .plat:hover{
+[data-theme="light"] .plat:hover .plat-inner{
   background:rgba(255,255,255,0.72);
   box-shadow:inset 0 1px 0 0 rgba(255,255,255,0.95), 0 12px 32px rgba(0,0,0,0.07);
 }
+/* ── Aceternity Card Hover spotlight ─────────────────────────────────────
+   .card-spot is injected by card-hover.js, sits as a sibling BEFORE
+   .plat-inner in DOM order — so it's naturally behind the dark card.
+   Light gray tint that peeks around the edges of the black .plat-inner. */
+.card-spot {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgba(165, 168, 185, 0.13);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+  will-change: transform, opacity;
+}
+[data-theme="light"] .card-spot {
+  background: rgba(110, 115, 135, 0.10);
+}
+
 .plat-ico{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:700}
 .plat-ico img{width:28px;height:28px;object-fit:contain}
 .plat-name{font-family:var(--body);font-size:13.5px;font-weight:600;letter-spacing:-.01em}
@@ -1892,7 +2001,7 @@ html.theme-transitioning .hero .h-xl.shiny-text {
   /* Platform grid */
   .plat-grid { gap: 10px; }
   .plat-grid > .plat { flex: 0 0 calc(50% - 5px); }
-  .plat { padding: 18px 12px; }
+  .plat-inner { padding: 18px 12px; }
   .plat-name { font-size: 12.5px; }
 
   /* Contact */
@@ -2119,7 +2228,7 @@ html.theme-transitioning .hero .h-xl.shiny-text {
   text-align: left;
   border: 1px solid rgba(255,255,255,0.06);
   box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.04), 0 10px 30px -10px rgba(0,0,0,0.4);
-  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   cursor: pointer;
   position: relative;
   overflow: hidden;
@@ -2197,7 +2306,7 @@ html.theme-transitioning .hero .h-xl.shiny-text {
   background: rgba(255,255,255,0.02);
   border: 1px solid rgba(255,255,255,0.08);
   font-size: 20px;
-  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.2s cubic-bezier(0.34, 1.4, 0.64, 1);
 }
 
 .proj-card-new:hover .proj-icon-box {
@@ -2306,7 +2415,8 @@ html.theme-transitioning .hero .h-xl.shiny-text {
   color: var(--fg-2);
   line-height: 1.55;
   font-weight: 400;
-  transition: all 0.3s var(--ease);
+  transition: padding-left 0.18s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              color 0.18s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   padding-left: 0;
 }
 
@@ -2318,7 +2428,7 @@ html.theme-transitioning .hero .h-xl.shiny-text {
   flex-shrink: 0;
   margin-top: 3px;
   color: #22c55e;
-  transition: transform 0.3s var(--ease);
+  transition: transform 0.18s cubic-bezier(0.34, 1.4, 0.64, 1);
 }
 
 .proj-card-new:hover .proj-features-list li svg {
@@ -2339,7 +2449,8 @@ html.theme-transitioning .hero .h-xl.shiny-text {
   margin-top: auto;
   padding-top: 12px;
   letter-spacing: 0.01em;
-  transition: all 0.3s var(--ease);
+  transition: color 0.18s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              gap   0.18s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
 }
 
@@ -2348,7 +2459,8 @@ html.theme-transitioning .hero .h-xl.shiny-text {
   position: absolute;
   right: -18px;
   opacity: 0;
-  transition: all 0.3s var(--ease);
+  transition: opacity 0.18s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              right  0.18s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .proj-card-new:hover .proj-link-new {
@@ -3259,7 +3371,7 @@ html.theme-transitioning .hero .h-xl.shiny-text {
 
   /* Platform cards — 2 per row */
   .plat-grid > .plat { flex: 0 0 calc(50% - 8px); }
-  .plat { padding: 16px 12px; gap: 8px; }
+  .plat-inner { padding: 16px 12px; gap: 8px; }
   .plat-name { font-size: 12px; }
   .plat-handle { font-size: 10px; }
   .plat-badge { font-size: 9.5px; padding: 2px 8px; }
@@ -3347,6 +3459,10 @@ html.theme-transitioning .hero .h-xl.shiny-text {
 .stat-n {
   min-width: 3ch;
   display: inline-block;
+  will-change: filter, opacity;
+  /* Smooth the blur-to-sharp transition driven by JS */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 /* Hero canvas particles — don't clip portrait */
@@ -4076,4 +4192,294 @@ html.theme-transitioning .hero .h-xl.shiny-text {
     transition-duration: 0.01ms !important;
   }
   .ascii-wave-container { display: none; }
+}
+
+
+/* ══════════════════════════════════════════
+   FOCUS CARDS — Aceternity-style hover effect
+   When any card is hovered, siblings dim + blur
+══════════════════════════════════════════ */
+
+/*
+ * Asymmetric transitions:
+ * - Enter (blur in): fast at 0.25s so it feels responsive
+ * - Exit (blur out): slow at 0.55s with a gentle ease so it dissolves
+ *   rather than snapping off. JS adds a small delay before removing
+ *   has-focus so this exit transition actually plays.
+ */
+.proj-grid-new .r {
+  transition:
+    opacity   0.55s cubic-bezier(0.4, 0, 0.2, 1),
+    filter    0.55s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.55s cubic-bezier(0.34, 1.2, 0.64, 1);
+  will-change: opacity, filter, transform;
+}
+
+/* When entering focus state — snap in quickly */
+.proj-grid-new.has-focus .r {
+  opacity: 0.38;
+  filter: blur(2px) saturate(0.55);
+  transform: scale(0.972);
+  transition:
+    opacity   0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    filter    0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    transform 0.25s cubic-bezier(0.34, 1.2, 0.64, 1);
+}
+
+/* Focused wrapper — stays crisp and lifts slightly */
+.proj-grid-new.has-focus .r:has(.proj-card-new.focused) {
+  opacity: 1;
+  filter: none;
+  transform: scale(1.015);
+}
+
+/* Fallback for browsers without :has() */
+.proj-grid-new.has-focus .r.focused-wrapper {
+  opacity: 1;
+  filter: none;
+  transform: scale(1.015);
+}
+
+/* Focused card — sharper border + tighter glow */
+.proj-card-new.focused {
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.09),
+    0 20px 48px -12px rgba(0, 0, 0, 0.65),
+    0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+  transition:
+    border-color 0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow   0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+[data-theme="light"] .proj-card-new.focused {
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 1),
+    0 20px 48px -12px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Disable focus effect on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .proj-grid-new .r {
+    will-change: auto;
+  }
+  .proj-grid-new.has-focus .r {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+  .proj-grid-new.has-focus .r:has(.proj-card-new.focused),
+  .proj-grid-new.has-focus .r.focused-wrapper {
+    transform: none;
+  }
+}
+
+/* ── PIXEL IMAGE — canvas overlay for hero portrait ── */
+.portrait canvas.pixel-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--r);
+  pointer-events: none;
+  z-index: 2;
+  /* GPU-composited layer for smooth pixel animation */
+  will-change: opacity;
+  backface-visibility: hidden;
+}
+
+/* While pixel canvas is active, suppress the img hover effects
+   so they don't fight the canvas overlay */
+.portrait:has(canvas.pixel-canvas) img {
+  transition: opacity 0.3s ease !important;
+}
+
+
+/* ══════════════════════════════════════════
+   KINETIC TEXT — MagicUI port
+   Each character bolds on hover; adjacent
+   siblings fall off in weight via CSS :has().
+   Applied to section headings outside hero.
+══════════════════════════════════════════ */
+
+/*
+ * .kt-text  — the heading element
+ * .kt-char  — each individual character span
+ *
+ * The wave cascade uses CSS :has() to reach
+ * siblings relative to the hovered character.
+ * Browsers without :has() still get the bold
+ * on the hovered char — just no wave.
+ */
+.kt-text {
+  display: flex;
+  flex-wrap: wrap;
+  /* Start at light weight so the bold pop is dramatic */
+  font-weight: 300;
+  /* Preserve the existing shiny-text gradient */
+  cursor: default;
+}
+
+.kt-char {
+  display: inline-block;
+  will-change: font-weight, padding;
+  transition:
+    font-weight 0.4s ease,
+    padding     0.4s ease,
+    -webkit-text-stroke-color 0.4s ease;
+  /* Invisible stroke at rest — thickens on hover for optical weight */
+  -webkit-text-stroke-color: transparent;
+  -webkit-text-stroke-width: calc(1em * 125 / 6000);
+}
+
+/* Italic characters (flattened from <em>) */
+.kt-char.kt-italic {
+  font-style: italic;
+}
+
+/* ── Hovered character — full bold ── */
+.kt-char:hover {
+  font-weight: 900;
+  padding-inline: calc(1em / 12);
+  -webkit-text-stroke-color: currentColor;
+  -webkit-text-stroke-width: calc(1em * 250 / 6000);
+}
+
+/* ── Immediate neighbour (±1) — semi-bold ── */
+.kt-char:has(+ .kt-char:hover),
+.kt-char:hover + .kt-char {
+  font-weight: 600;
+  padding-inline: calc(1em / 12);
+}
+
+/* ── Two away (±2) — light falloff ── */
+.kt-char:has(+ .kt-char + .kt-char:hover),
+.kt-char:hover + .kt-char + .kt-char {
+  font-weight: 400;
+}
+
+/* ── Shiny-text compatibility ─────────────
+   The shiny-text gradient animates on the parent.
+   We re-apply it to each .kt-char so the sweep
+   flows across the full heading width, not per-char. */
+.kt-text.shiny-text {
+  /* Remove gradient from parent — chars handle it */
+  background: none !important;
+  -webkit-text-fill-color: unset !important;
+  animation: none !important;
+}
+
+.kt-text.shiny-text .kt-char {
+  background: linear-gradient(
+    120deg,
+    rgba(255,255,255,0.75) 20%,
+    rgba(255,255,255,1)    40%,
+    rgba(220,240,255,1)    50%,
+    rgba(255,255,255,1)    60%,
+    rgba(255,255,255,0.75) 80%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shiny-sweep 5s linear infinite;
+  /* Stroke must be transparent when gradient is active */
+  -webkit-text-stroke-color: transparent !important;
+}
+
+[data-theme="light"] .kt-text.shiny-text .kt-char {
+  background: linear-gradient(
+    120deg,
+    rgba(14,14,16,0.6)  20%,
+    rgba(14,14,16,1)    40%,
+    rgba(80,60,20,1)    50%,
+    rgba(14,14,16,1)    60%,
+    rgba(14,14,16,0.6)  80%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shiny-sweep 5s linear infinite;
+  -webkit-text-stroke-color: transparent !important;
+}
+
+/* lwt-heading has its own gradient — match it */
+.lwt-heading.kt-text.shiny-text .kt-char {
+  background: linear-gradient(
+    120deg,
+    rgba(255,255,255,0.65) 20%,
+    rgba(255,255,255,1)    40%,
+    rgba(220,240,255,1)    50%,
+    rgba(255,255,255,1)    60%,
+    rgba(255,255,255,0.65) 80%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shiny-sweep 5s linear infinite;
+}
+
+[data-theme="light"] .lwt-heading.kt-text.shiny-text .kt-char {
+  background: linear-gradient(
+    120deg,
+    rgba(14,14,16,0.55) 20%,
+    rgba(14,14,16,1)    40%,
+    rgba(80,60,20,1)    50%,
+    rgba(14,14,16,1)    60%,
+    rgba(14,14,16,0.55) 80%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shiny-sweep 5s linear infinite;
+}
+
+/* dev-stack-heading has its own gradient too */
+.dev-stack-heading.kt-text.shiny-text .kt-char {
+  background: linear-gradient(
+    120deg,
+    rgba(255,255,255,0.7) 20%,
+    rgba(255,255,255,1)   40%,
+    rgba(220,240,255,1)   50%,
+    rgba(255,255,255,1)   60%,
+    rgba(255,255,255,0.7) 80%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shiny-sweep 5s linear infinite;
+}
+
+[data-theme="light"] .dev-stack-heading.kt-text.shiny-text .kt-char {
+  background: linear-gradient(
+    120deg,
+    rgba(14,14,16,0.55) 20%,
+    rgba(14,14,16,1)    40%,
+    rgba(80,60,20,1)    50%,
+    rgba(14,14,16,1)    60%,
+    rgba(14,14,16,0.55) 80%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shiny-sweep 5s linear infinite;
+}
+
+/* Disable on touch/reduced-motion */
+@media (pointer: coarse) {
+  .kt-char {
+    transition: none;
+    will-change: auto;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kt-char {
+    transition: none !important;
+  }
 }

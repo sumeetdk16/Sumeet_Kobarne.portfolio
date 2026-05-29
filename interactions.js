@@ -32,23 +32,54 @@
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   function animateCount(el) {
-    const raw    = el.textContent.trim();
-    const match  = raw.match(/^(\d+)(\D*)$/);
+    const raw   = el.textContent.trim();
+    // Match: optional prefix, digits, optional suffix (e.g. "700+", "3★", "1600+")
+    const match = raw.match(/^([^\d]*)(\d+)(\D*)$/);
     if (!match) return;
 
-    const target = parseInt(match[1], 10);
-    const suffix = match[2] || '';
-    const duration = 1400;
+    const prefix   = match[1] || '';
+    const target   = parseInt(match[2], 10);
+    const suffix   = match[3] || '';
+    const duration = 2200;
     const start    = performance.now();
 
-    function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+    // Smooth cubic ease-in-out: slow start, cruise, slow finish
+    function easeCubicInOut(t) {
+      return t < 0.5
+        ? 4 * t * t * t
+        : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    }
+
+    // Always count from 0 for a satisfying full sweep
+    const startVal = 0;
+
+    // Subtle blur-to-sharp: starts soft, resolves cleanly
+    el.style.filter     = 'blur(5px)';
+    el.style.opacity    = '0.2';
+    el.style.transition = 'none';
 
     function tick(now) {
-      const progress = Math.min((now - start) / duration, 1);
-      const value    = Math.round(easeOut(progress) * target);
-      el.textContent = value + suffix;
-      if (progress < 1) requestAnimationFrame(tick);
+      const t     = Math.min((now - start) / duration, 1);
+      const eased = easeCubicInOut(t);
+      const value = Math.round(startVal + eased * (target - startVal));
+
+      el.textContent = prefix + value + suffix;
+
+      // Blur and opacity clear gradually — most of the clearing happens in the last 30%
+      const blurPx  = (1 - eased) * 5;
+      const opacity = 0.2 + eased * 0.8;
+      el.style.filter  = blurPx > 0.05 ? `blur(${blurPx.toFixed(2)}px)` : 'none';
+      el.style.opacity = opacity.toFixed(3);
+
+      if (t < 1) {
+        requestAnimationFrame(tick);
+      } else {
+        el.textContent  = prefix + target + suffix;
+        el.style.filter  = 'none';
+        el.style.opacity = '1';
+      }
     }
+
     requestAnimationFrame(tick);
   }
 
@@ -56,10 +87,13 @@
     entries.forEach(e => {
       if (!e.isIntersecting) return;
       const statNums = e.target.querySelectorAll('.stat-n');
-      statNums.forEach(animateCount);
+      // Stagger each stat so they cascade left-to-right
+      statNums.forEach((el, i) => {
+        setTimeout(() => animateCount(el), i * 160);
+      });
       obs.unobserve(e.target);
     });
-  }, { threshold: 0.5 });
+  }, { threshold: 0.4 });
 
   document.querySelectorAll('.stats').forEach(el => obs.observe(el));
 })();
