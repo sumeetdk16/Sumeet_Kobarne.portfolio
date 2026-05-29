@@ -6,11 +6,18 @@ npx vite build
 
 # 2. Copy all static files into dist
 cp index.html about.html projects.html style.css dist/
-cp cursor-trail.js typewriter.js pixel-canvas.js dist/
-cp magnet-lines.js variable-proximity.js interactions.js dist/
-cp flipping-board.js footer-time.js draggable-footer.js ascii-wave.js hamburger-overlay.js tubelight-nav.js theme-circle.js dist/
+
+# Copy every JS file in the root (except vite config / node scripts)
+for f in *.js; do
+  case "$f" in
+    vite.config.js) ;;          # skip vite config
+    *) cp "$f" dist/ ;;
+  esac
+done
+
 cp resume.pdf dist/ 2>/dev/null || true
 cp profile.jpg dist/ 2>/dev/null || true
+cp download.png dist/ 2>/dev/null || true
 cp -r fonts dist/ 2>/dev/null || true
 
 # 3. Swap module shader import → bundled IIFE in all HTML files
