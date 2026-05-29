@@ -521,6 +521,22 @@ html.theme-transitioning .shiny-text {
 .hero-desc strong { color: var(--fg); font-weight: 700; }
 .hero-ctas{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:28px}
 
+/* ── ROUGH-NOTATION SVG — keep behind text ── */
+/* rough-notation injects an <svg> as a sibling after the annotated span.
+   The h1 uses -webkit-text-fill-color:transparent for the shiny gradient,
+   so any opaque overlay hides the text. We push the SVG behind with z-index
+   and use mix-blend-mode so it tints rather than covers. */
+#hl-fsd, #hl-cp {
+  position: relative;
+  z-index: 1;
+}
+#hl-fsd + svg,
+#hl-cp  + svg {
+  z-index: 0 !important;
+  mix-blend-mode: screen;   /* blends orange strokes through the white text */
+  pointer-events: none;
+}
+
 /* ── RESUME BUTTON ───────────────────────── */
 .btn-resume {
   font-family: var(--mono);

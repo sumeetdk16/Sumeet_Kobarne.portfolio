@@ -855,23 +855,26 @@
 
         var isDark = document.documentElement.dataset.theme !== 'light';
 
+        // "Full Stack Developer" — bracket wraps around without covering text
         var annFsd = RoughNotation.annotate(fsd, {
-          type: 'highlight',
-          color: isDark ? 'rgba(251,146,60,0.22)' : 'rgba(251,146,60,0.28)',
-          strokeWidth: 1,
-          animationDuration: 800,
+          type: 'bracket',
+          color: isDark ? 'rgba(251,146,60,0.9)' : 'rgba(200,80,0,0.85)',
+          strokeWidth: 2.5,
+          animationDuration: 700,
           iterations: 2,
-          padding: 4,
+          padding: 6,
+          brackets: ['left', 'right'],
           multiline: false,
         });
 
+        // "CP enthusiast" — hand-drawn underline
         var annCp = RoughNotation.annotate(cp, {
           type: 'underline',
-          color: isDark ? 'rgba(251,146,60,0.85)' : 'rgba(220,100,10,0.9)',
-          strokeWidth: 2.5,
+          color: isDark ? 'rgba(251,146,60,0.95)' : 'rgba(200,80,0,0.9)',
+          strokeWidth: 3,
           animationDuration: 600,
           iterations: 2,
-          padding: 3,
+          padding: 4,
           multiline: false,
         });
 
@@ -882,11 +885,11 @@
           if (entries[0].isIntersecting) {
             triggered = true;
             obs.disconnect();
-            // Stagger: highlight first, then underline
-            setTimeout(function () { annFsd.show(); }, 300);
-            setTimeout(function () { annCp.show();  }, 900);
+            // Stagger: bracket first, then underline
+            setTimeout(function () { annFsd.show(); }, 400);
+            setTimeout(function () { annCp.show();  }, 1000);
           }
-        }, { threshold: 0.4 });
+        }, { threshold: 0.3 });
 
         obs.observe(fsd);
 
@@ -894,7 +897,7 @@
         var themeObs = new MutationObserver(function () {
           annFsd.remove(); annCp.remove();
           themeObs.disconnect();
-          setTimeout(initHighlights, 50);
+          setTimeout(initHighlights, 80);
         });
         themeObs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
       }
