@@ -5,9 +5,34 @@
   <meta charset="UTF-8" />
   <script>document.documentElement.dataset.theme=localStorage.getItem('rbp-theme')||'dark';</script>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Projects | Sumeet Kobarne</title>
-  <meta name="description" content="Selected projects by Sumeet Kobarne — Full Stack Developer from Pune." />
+
+  <!-- ── Primary SEO ──────────────────────────────────────────────── -->
+  <title>Projects by Sumeet Kobarne | Full Stack Developer Portfolio</title>
+  <meta name="description" content="Explore projects built by Sumeet Kobarne — Full Stack Developer from Pune. Web apps, tools, and more built with React, Node.js, and modern web technologies." />
+  <meta name="keywords" content="Sumeet Kobarne projects, Full Stack projects, React projects, Node.js, Web Development portfolio, Pune developer" />
+  <meta name="author" content="Sumeet Kobarne" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://sumeetkobarne.vercel.app/projects.html" />
+
+  <!-- ── Open Graph ────────────────────────────────────────────────── -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://sumeetkobarne.vercel.app/projects.html" />
+  <meta property="og:title" content="Projects | Sumeet Kobarne — Full Stack Developer" />
+  <meta property="og:description" content="Explore projects built by Sumeet Kobarne — Full Stack Developer from Pune." />
+  <meta property="og:image" content="https://sumeetkobarne.vercel.app/profile.jpg" />
+  <meta property="og:site_name" content="Sumeet Kobarne" />
+
+  <!-- ── Twitter Card ──────────────────────────────────────────────── -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Projects | Sumeet Kobarne" />
+  <meta name="twitter:description" content="Full Stack Developer projects — React, Node.js, and modern web tech." />
+  <meta name="twitter:image" content="https://sumeetkobarne.vercel.app/profile.jpg" />
+
+  <!-- ── Theme & Resource hints ───────────────────────────────────── -->
   <meta name="theme-color" content="#0d0a08" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
   <link rel="stylesheet" href="style.css" />
   <style>
     .bg-green {
@@ -68,6 +93,11 @@
   <div class="nav-drawer" id="nav-drawer" role="dialog" aria-modal="true" aria-label="Navigation menu">
     <div class="nav-drawer-backdrop" id="nav-drawer-backdrop"></div>
     <div class="nav-drawer-panel">
+      <button class="drawer-close-btn" id="drawer-close-btn" aria-label="Close menu">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
       <div class="ham-brand">
         <span class="ham-initials">Sumeet Kobarne</span>
         <span class="ham-tagline">Full Stack Developer</span>
@@ -378,21 +408,20 @@
 
     </main>
   </div>
-  <script src="footer-time.js"></script>
   <script type="module" src="shader.js"></script>
-  <script src="cursor-trail.js"></script>
+  <script defer src="cursor-trail.js"></script>
   <!-- Inline time update for instant display -->
   <script>
     (function(){var n=new Date(),h=n.getHours(),m=n.getMinutes().toString().padStart(2,'0'),s=n.getSeconds().toString().padStart(2,'0'),a=h>=12?'PM':'AM',d=h%12||12,w=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],M=['January','February','March','April','May','June','July','August','September','October','November','December'],t=d+':'+m+':'+s+' '+a+'\n'+w[n.getDay()]+', '+M[n.getMonth()]+' '+n.getDate()+', '+n.getFullYear()+' (GMT +05:30)',e=document.getElementById('footer-time-projects');if(e)e.textContent=t;})();
   </script>
-  <script src="footer-time.js"></script>
-  <script src="interactions.js"></script>
-  <script src="card-hover.js"></script>
-  <script src="focus-cards.js"></script>
-  <script src="ascii-wave.js"></script>
-  <script src="tubelight-nav.js"></script>
-  <script src="hamburger-overlay.js"></script>
-  <script src="theme-circle.js"></script>
+  <script defer src="footer-time.js"></script>
+  <script defer src="interactions.js"></script>
+  <script defer src="card-hover.js"></script>
+  <script defer src="focus-cards.js"></script>
+  <script defer src="ascii-wave.js"></script>
+  <script defer src="tubelight-nav.js"></script>
+  <script defer src="hamburger-overlay.js"></script>
+  <script defer src="theme-circle.js"></script>
   <script>
     window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
   </script>

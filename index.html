@@ -7,13 +7,71 @@
        reads the correct data-theme on first access, not the hardcoded default. -->
   <script>document.documentElement.dataset.theme=localStorage.getItem('rbp-theme')||'dark';</script>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Sumeet Kobarne</title>
-  <meta name="description"
-    content="Full Stack Developer & Competitive Programmer from Pune — CS undergrad at SPPU building clean web experiences." />
+
+  <!-- ── Primary SEO ──────────────────────────────────────────────── -->
+  <title>Sumeet Kobarne | Full Stack Developer & Competitive Programmer</title>
+  <meta name="description" content="Sumeet Kobarne — Full Stack Developer & Competitive Programmer from Pune, India. CS undergrad at SPPU building clean web experiences and solving complex problems through code." />
+  <meta name="keywords" content="Sumeet Kobarne, Full Stack Developer, Competitive Programmer, Web Developer, React, Node.js, SPPU, Pune, Software Engineer, Portfolio, JavaScript, CP enthusiast" />
   <meta name="author" content="Sumeet Kobarne" />
-  <meta property="og:title" content="Sumeet Kobarne — Full Stack Developer" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://sumeetkobarne.vercel.app/" />
+
+  <!-- ── Open Graph ────────────────────────────────────────────────── -->
   <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://sumeetkobarne.vercel.app/" />
+  <meta property="og:title" content="Sumeet Kobarne | Full Stack Developer & CP Enthusiast" />
+  <meta property="og:description" content="CS undergrad at SPPU building clean web experiences and solving complex problems. Full Stack Developer & Competitive Programmer from Pune, India." />
+  <meta property="og:image" content="https://sumeetkobarne.vercel.app/profile.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="Sumeet Kobarne" />
+  <meta property="og:locale" content="en_IN" />
+
+  <!-- ── Twitter Card ──────────────────────────────────────────────── -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Sumeet Kobarne | Full Stack Developer" />
+  <meta name="twitter:description" content="CS undergrad at SPPU. Full Stack Developer & Competitive Programmer from Pune, India." />
+  <meta name="twitter:image" content="https://sumeetkobarne.vercel.app/profile.jpg" />
+  <meta name="twitter:creator" content="@sumeetdk16" />
+
+  <!-- ── Theme & Favicon ───────────────────────────────────────────── -->
   <meta name="theme-color" content="#0c0806" />
+
+  <!-- ── Resource hints ───────────────────────────────────────────── -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+
+  <!-- ── Structured data (JSON-LD) ────────────────────────────────── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Sumeet Kobarne",
+    "url": "https://sumeetkobarne.vercel.app/",
+    "image": "https://sumeetkobarne.vercel.app/profile.jpg",
+    "jobTitle": "Full Stack Developer",
+    "description": "CS undergrad at SPPU, Full Stack Developer & Competitive Programmer from Pune, India.",
+    "email": "kobarne21@gmail.com",
+    "alumniOf": {
+      "@type": "CollegeOrUniversity",
+      "name": "Savitribai Phule Pune University",
+      "sameAs": "https://www.unipune.ac.in/"
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Pune",
+      "addressCountry": "IN"
+    },
+    "sameAs": [
+      "https://github.com/sumeetdk16",
+      "https://www.linkedin.com/in/sumeet-kobarne/",
+      "https://leetcode.com/sumeetdk"
+    ],
+    "knowsAbout": ["JavaScript", "React", "Node.js", "Full Stack Development", "Competitive Programming", "Web Development"]
+  }
+  </script>
+
   <link rel="stylesheet" href="style.css" />
   <style>
     /* ─ Gradient mockup bg for project cards ─ */
@@ -79,6 +137,11 @@
   <div class="nav-drawer" id="nav-drawer" role="dialog" aria-modal="true" aria-label="Navigation menu">
     <div class="nav-drawer-backdrop" id="nav-drawer-backdrop"></div>
     <div class="nav-drawer-panel">
+      <button class="drawer-close-btn" id="drawer-close-btn" aria-label="Close menu">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
       <div class="ham-brand">
         <span class="ham-initials">Sumeet Kobarne</span>
         <span class="ham-tagline">Full Stack Developer</span>
@@ -172,7 +235,8 @@
             <div class="r" style="transition-delay:.18s;" aria-label="Portrait of Sumeet Kobarne">
               <div class="portrait">
                 <div class="portrait-ring" aria-hidden="true"></div>
-                <img src="profile.jpg" alt="Sumeet Kobarne" width="210" height="256"
+                <img src="profile.jpg" alt="Sumeet Kobarne — Full Stack Developer from Pune" width="210" height="256"
+                  fetchpriority="high" decoding="async"
                   onerror="this.style.display='none';document.getElementById('pfb').style.display='flex';" />
                 <div class="portrait-fb" id="pfb" style="display:none;">
                   <span>SK</span>
@@ -268,7 +332,7 @@
             <a class="plat lc r" href="https://leetcode.com/u/sumeetdk/" target="_blank" rel="noopener"
               aria-label="LeetCode profile">
               <div class="plat-ico" style="background:rgba(255,161,22,.1);">
-                <img src="https://cdn.simpleicons.org/leetcode/FFA116" alt="LeetCode"
+                <img loading="lazy" decoding="async" src="https://cdn.simpleicons.org/leetcode/FFA116" alt="LeetCode"
                   onerror="this.parentElement.innerHTML='LC'" />
               </div>
               <div class="plat-name">LeetCode</div>
@@ -279,7 +343,7 @@
             <a class="plat cc r" href="https://www.codechef.com/users/sumeetdk" target="_blank" rel="noopener"
               aria-label="CodeChef profile" style="transition-delay:.04s;">
               <div class="plat-ico" style="background:rgba(107,167,92,.1);">
-                <img src="https://cdn.simpleicons.org/codechef/6BA75C" alt="CodeChef"
+                <img loading="lazy" decoding="async" src="https://cdn.simpleicons.org/codechef/6BA75C" alt="CodeChef"
                   onerror="this.parentElement.innerHTML='CC'" />
               </div>
               <div class="plat-name">CodeChef</div>
@@ -290,7 +354,7 @@
             <a class="plat cf r" href="https://codeforces.com/profile/sumeet_dk" target="_blank" rel="noopener"
               aria-label="Codeforces profile" style="transition-delay:.08s;">
               <div class="plat-ico" style="background:rgba(26,117,255,.1);">
-                <img src="https://cdn.simpleicons.org/codeforces/1A75FF" alt="Codeforces"
+                <img loading="lazy" decoding="async" src="https://cdn.simpleicons.org/codeforces/1A75FF" alt="Codeforces"
                   onerror="this.parentElement.innerHTML='CF'" />
               </div>
               <div class="plat-name">Codeforces</div>
@@ -301,7 +365,7 @@
             <a class="plat gfg r" href="https://www.geeksforgeeks.org/user/sumeetdk/" target="_blank" rel="noopener"
               aria-label="GeeksforGeeks profile" style="transition-delay:.12s;">
               <div class="plat-ico" style="background:rgba(22,163,74,.1);">
-                <img src="https://cdn.simpleicons.org/geeksforgeeks/2F8D46" alt="GFG"
+                <img loading="lazy" decoding="async" src="https://cdn.simpleicons.org/geeksforgeeks/2F8D46" alt="GFG"
                   onerror="this.parentElement.innerHTML='GFG'" />
               </div>
               <div class="plat-name">GeeksforGeeks</div>
@@ -758,26 +822,28 @@
     </main>
   </div><!-- /shell -->
 
+  <!-- Critical: shader needs module (already async by spec) -->
   <script type="module" src="shader.js"></script>
-  <script src="pixel-canvas.js"></script>
-  <script src="cursor-trail.js"></script>
+  <!-- All other scripts deferred — parse/execute after HTML is ready, non-blocking -->
+  <script defer src="pixel-canvas.js"></script>
+  <script defer src="cursor-trail.js"></script>
   <!-- Inline time update for instant display -->
   <script>
     (function(){var n=new Date(),h=n.getHours(),m=n.getMinutes().toString().padStart(2,'0'),s=n.getSeconds().toString().padStart(2,'0'),a=h>=12?'PM':'AM',d=h%12||12,w=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],M=['January','February','March','April','May','June','July','August','September','October','November','December'],t=d+':'+m+':'+s+' '+a+'\n'+w[n.getDay()]+', '+M[n.getMonth()]+' '+n.getDate()+', '+n.getFullYear()+' (GMT +05:30)',e=document.getElementById('footer-time');if(e)e.textContent=t;})();
   </script>
-  <script src="footer-time.js"></script>
-  <script src="magnet-lines.js"></script>
-  <script src="variable-proximity.js"></script>
-  <script src="interactions.js"></script>
-  <script src="border-glow.js"></script>
-  <script src="card-hover.js"></script>
-  <script src="focus-cards.js"></script>
-  <script src="typewriter.js"></script>
-  <script src="ascii-wave.js"></script>
-  <script src="tubelight-nav.js"></script>
-  <script src="hamburger-overlay.js"></script>
-  <script src="theme-circle.js"></script>
-  <script src="magnetic-button.js"></script>
+  <script defer src="footer-time.js"></script>
+  <script defer src="magnet-lines.js"></script>
+  <script defer src="variable-proximity.js"></script>
+  <script defer src="interactions.js"></script>
+  <script defer src="border-glow.js"></script>
+  <script defer src="card-hover.js"></script>
+  <script defer src="focus-cards.js"></script>
+  <script defer src="typewriter.js"></script>
+  <script defer src="ascii-wave.js"></script>
+  <script defer src="tubelight-nav.js"></script>
+  <script defer src="hamburger-overlay.js"></script>
+  <script defer src="theme-circle.js"></script>
+  <script defer src="magnetic-button.js"></script>
   <script>
     window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
   </script>

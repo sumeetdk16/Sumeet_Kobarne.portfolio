@@ -2975,6 +2975,46 @@ html.theme-transitioning .hero .h-xl.shiny-text {
   display: none;
 }
 
+/* ── Drawer close button (×) ─────────────── */
+.drawer-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.7);
+  cursor: pointer;
+  z-index: 10;
+  /* hidden until drawer opens */
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.7);
+  transition: opacity 0.3s var(--ease) 0.1s,
+              transform 0.35s var(--spring) 0.1s,
+              background 0.2s, color 0.2s, border-color 0.2s;
+}
+.nav-drawer.open .drawer-close-btn {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+.drawer-close-btn:hover {
+  background: rgba(251,146,60,0.15);
+  border-color: rgba(251,146,60,0.35);
+  color: #fb923c;
+}
+.drawer-close-btn svg {
+  flex-shrink: 0;
+  transition: transform 0.2s var(--spring);
+}
+.drawer-close-btn:hover svg {
+  transform: rotate(90deg) scale(1.1);
+}
+
 /* Full-screen panel — structured space-between layout */
 .nav-drawer-panel {
   position: fixed;

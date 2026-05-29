@@ -446,6 +446,10 @@ window.handleContactFormSubmit = function (event) {
   // Close on backdrop click
   if (backdrop) backdrop.addEventListener('click', closeDrawer);
 
+  // Close button (× inside the drawer panel)
+  const closeBtn = document.getElementById('drawer-close-btn');
+  if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+
   // Close on Escape key
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') closeDrawer();
