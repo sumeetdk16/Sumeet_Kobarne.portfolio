@@ -3488,6 +3488,83 @@ html.theme-transitioning .hero .h-xl.shiny-text {
 /* Skill tags — cursor pointer to hint they're clickable */
 .skill { cursor: pointer; }
 
+/* ══════════════════════════════════════════════════════════════════════
+   MOBILE / TABLET PERFORMANCE
+   Touch / coarse-pointer devices: disable all heavy JS-driven animations.
+   Laptop/desktop (pointer:fine) keeps everything.
+   ascii-wave is intentionally excluded — user requested it stays.
+══════════════════════════════════════════════════════════════════════ */
+@media (pointer: coarse), (max-width: 1024px) and (hover: none) {
+
+  /* ── Border-glow beam: always hidden, JS won't run but CSS fallback ── */
+  .plat::before { opacity: 0 !important; }
+
+  /* ── Card hover spotlight: hide completely ────────────────────────── */
+  .card-spot { display: none !important; }
+
+  /* ── Cursor trail: hidden (JS skips touch, but ensure no flash) ───── */
+  .cursor-trail, #cursor-trail { display: none !important; }
+
+  /* ── Magnet lines canvas: hide ─────────────────────────────────────── */
+  .magnet-lines-container canvas,
+  #magnet-lines-canvas { display: none !important; }
+
+  /* ── Variable proximity text: disable blur/scale transitions ─────── */
+  .variable-proximity { filter: none !important; transform: none !important; }
+
+  /* ── Hover lift on platform cards: disable ──────────────────────── */
+  .plat:hover { transform: none !important; }
+
+  /* ── Project card spotlight mouse-tracking gradient: disable ─────── */
+  .proj-card-new::before { background: none !important; }
+
+  /* ── Project card hover lift: reduce to near-zero ────────────────── */
+  .proj-card-new:hover { transform: translateY(-2px) !important; }
+
+  /* ── Focus/blur cards: disable heavy transitions ─────────────────── */
+  .focus-card { transition: opacity 0.2s ease !important; filter: none !important; }
+
+  /* ── Shader canvas: hidden on mobile (JS skips already, but safety) ─ */
+  #hero-shader-canvas { display: none !important; }
+
+  /* ── Reduce all transition durations for snappier feel ───────────── */
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.15s !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* ── But DON'T kill ascii-wave animations (explicitly restore) ────── */
+  #ascii-wave-container,
+  #ascii-wave-container * {
+    animation-duration: revert !important;
+    animation-iteration-count: revert !important;
+    transition-duration: revert !important;
+  }
+
+  /* ── Magnetic button: no transform on mobile ────────────────────── */
+  .btn-resume, .btn-contact-toggle { transform: none !important; }
+}
+
+/* ── Respect prefers-reduced-motion globally ─────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.15s !important;
+  }
+  /* Preserve ascii-wave */
+  #ascii-wave-container,
+  #ascii-wave-container * {
+    animation-duration: revert !important;
+    animation-iteration-count: revert !important;
+  }
+  .plat::before { opacity: 0 !important; }
+  .card-spot { display: none !important; }
+  .cursor-trail, #cursor-trail { display: none !important; }
+}
+
 /* Stagger children — ensure they start hidden for stagger reveal */
 .xp-list .xp-item,
 .plat-grid .plat {
@@ -4293,4 +4370,82 @@ html.theme-transitioning .hero .h-xl.shiny-text {
    so they don't fight the canvas overlay */
 .portrait:has(canvas.pixel-canvas) img {
   transition: opacity 0.3s ease !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   LAPTOP / DESKTOP RENDERING PERFORMANCE
+   GPU-compositing, content-visibility, and paint optimizations.
+══════════════════════════════════════════════════════════════════════ */
+
+/* ── content-visibility: skip rendering off-screen sections ────────────
+   Browser defers paint+layout for sections below the fold.
+   contain-intrinsic-size prevents layout shift when they become visible. */
+@media (min-width: 1025px) {
+  .sec {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 600px;
+  }
+  .lwt-section {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 400px;
+  }
+  .connect {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 500px;
+  }
+}
+
+/* ── GPU-promote composited layers for animated elements ────────────── */
+.plat,
+.plat-inner,
+.proj-card-new,
+.nav-pill,
+.portrait,
+.card-spot,
+.btn-resume,
+.btn-contact-toggle {
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Remove will-change after animation settles (JS-driven hover) */
+.plat:not(:hover),
+.proj-card-new:not(:hover) {
+  will-change: auto;
+}
+
+/* ── Cursor-trail canvas: own compositor layer ──────────────────────── */
+canvas[style*="z-index:9999"] {
+  will-change: contents;
+}
+
+/* ── Smooth scrolling on desktop only ─────────────────────────────── */
+@media (min-width: 1025px) and (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* ── Image rendering optimization ──────────────────────────────────── */
+img {
+  image-rendering: auto;
+}
+.portrait img,
+.plat-ico img {
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* ── Reduce paint area: use transform instead of top/left for fixed els */
+.nav {
+  transform: translateX(-50%) translateZ(0); /* centre + promote to own GPU layer */
+}
+
+/* ── Font rendering: sub-pixel on desktop ───────────────────────────── */
+@media (min-width: 1025px) {
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
 }
