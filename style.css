@@ -4440,6 +4440,12 @@ img {
 .nav {
   transform: translateX(-50%) translateZ(0); /* centre + promote to own GPU layer */
 }
+/* On mobile the nav is top-right, not centred — restore correct transform */
+@media (max-width: 600px) {
+  .nav {
+    transform: translateZ(0); /* keep GPU layer, drop the X centering */
+  }
+}
 
 /* ── Font rendering: sub-pixel on desktop ───────────────────────────── */
 @media (min-width: 1025px) {
