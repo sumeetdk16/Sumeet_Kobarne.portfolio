@@ -186,8 +186,8 @@
                   data-strings='["Sumeet Kobarne", "Sumeet.kobarne"]' data-speed="80"></span><span
                   class="typing-cursor"></span></span>
               <h1 class="h-xl shiny-text" id="hero-h">
-                Full Stack Developer<br />
-                &amp; <em>CP enthusiast</em>
+                <span id="hl-fsd">Full Stack Developer</span><br />
+                &amp; <em><span id="hl-cp">CP enthusiast</span></em>
               </h1>
 <p class="hero-desc" style="font-size:15px;line-height:1.78;margin-top:18px;">
                 <strong>CS undergrad at SPPU</strong> building clean web experiences and solving complex problems through code.
@@ -844,6 +844,68 @@
   <script defer src="hamburger-overlay.js"></script>
   <script defer src="theme-circle.js"></script>
   <script defer src="magnetic-button.js"></script>
+  <!-- rough-notation for text highlight effect -->
+  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
+  <script>
+    (function () {
+      function initHighlights() {
+        var fsd = document.getElementById('hl-fsd');
+        var cp  = document.getElementById('hl-cp');
+        if (!fsd || !cp || !window.RoughNotation) return;
+
+        var isDark = document.documentElement.dataset.theme !== 'light';
+
+        var annFsd = RoughNotation.annotate(fsd, {
+          type: 'highlight',
+          color: isDark ? 'rgba(251,146,60,0.22)' : 'rgba(251,146,60,0.28)',
+          strokeWidth: 1,
+          animationDuration: 800,
+          iterations: 2,
+          padding: 4,
+          multiline: false,
+        });
+
+        var annCp = RoughNotation.annotate(cp, {
+          type: 'underline',
+          color: isDark ? 'rgba(251,146,60,0.85)' : 'rgba(220,100,10,0.9)',
+          strokeWidth: 2.5,
+          animationDuration: 600,
+          iterations: 2,
+          padding: 3,
+          multiline: false,
+        });
+
+        // Trigger once when the h1 enters the viewport
+        var triggered = false;
+        var obs = new IntersectionObserver(function (entries) {
+          if (triggered) return;
+          if (entries[0].isIntersecting) {
+            triggered = true;
+            obs.disconnect();
+            // Stagger: highlight first, then underline
+            setTimeout(function () { annFsd.show(); }, 300);
+            setTimeout(function () { annCp.show();  }, 900);
+          }
+        }, { threshold: 0.4 });
+
+        obs.observe(fsd);
+
+        // Re-draw on theme change so colors stay correct
+        var themeObs = new MutationObserver(function () {
+          annFsd.remove(); annCp.remove();
+          themeObs.disconnect();
+          setTimeout(initHighlights, 50);
+        });
+        themeObs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initHighlights);
+      } else {
+        initHighlights();
+      }
+    })();
+  </script>
   <script>
     window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
   </script>
