@@ -30,6 +30,8 @@
 
   <!-- ── Theme & Resource hints ───────────────────────────────────── -->
   <meta name="theme-color" content="#0a0a0a" />
+  <link rel="icon" type="image/png" href="avatar-favicon.png" />
+  <link rel="apple-touch-icon" href="avatar-favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
@@ -718,25 +720,28 @@
             type: 'underline',
             color: light ? '#e05a00' : '#FF9800',
             animationDuration: 700,
-            iterations: 2,
+            iterations: 1,
             strokeWidth: 3,
-            padding: 2
+            padding: 2,
+            multiline: true
           });
         }
         var ann = makeAnn();
         var shown = false;
+        var showTimer = null;
         var obs = new IntersectionObserver(function (entries) {
           if (entries[0].isIntersecting && !shown) {
             shown = true;
-            ann.show();
             obs.disconnect();
+            showTimer = setTimeout(function () { ann.show(); }, 750);
           }
         }, { threshold: 0.1 });
         obs.observe(el);
         new MutationObserver(function () {
+          clearTimeout(showTimer);
           try { ann.remove(); } catch(e) {}
           ann = makeAnn();
-          if (shown) ann.show();
+          if (shown) showTimer = setTimeout(function () { ann.show(); }, 50);
         }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
       }
       if (document.readyState === 'loading') {
