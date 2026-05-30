@@ -42,8 +42,8 @@ import {
   // Add fallback gradient background
   const isDarkTheme = document.documentElement.dataset.theme !== 'light';
   shaderWrapper.style.background = isDarkTheme 
-    ? 'radial-gradient(ellipse at 30% 40%, rgba(251, 146, 60, 0.15) 0%, rgba(250, 204, 21, 0.1) 25%, rgba(244, 114, 182, 0.08) 50%, transparent 70%)'
-    : 'radial-gradient(ellipse at 30% 40%, rgba(251, 146, 60, 0.08) 0%, rgba(250, 204, 21, 0.05) 25%, rgba(244, 114, 182, 0.04) 50%, transparent 70%)';
+    ? 'radial-gradient(ellipse at 30% 40%, rgba(251, 146, 60, 0.09) 0%, rgba(250, 204, 21, 0.06) 25%, rgba(244, 114, 182, 0.05) 50%, transparent 70%)'
+    : 'radial-gradient(ellipse at 30% 40%, rgba(251, 146, 60, 0.05) 0%, rgba(250, 204, 21, 0.03) 25%, rgba(244, 114, 182, 0.02) 50%, transparent 70%)';
 
   // Store color conversion function globally for theme switching
   window.__getShaderColor = getShaderColorFromString;
@@ -71,7 +71,7 @@ import {
     u_colors: paddedColors,
     u_colorsCount: colors.length,
     u_softness: 0.76,
-    u_intensity: 0.45,
+    u_intensity: 0.28,
     u_noise: 0,
     u_shape: GrainGradientShapes.corners,
     u_offsetX: 0,
@@ -192,8 +192,8 @@ import {
     const shaderWrapper = document.getElementById('hero-shader');
     if (shaderWrapper) {
       const fallbackGradient = t === 'light'
-        ? 'radial-gradient(ellipse at 30% 40%, rgba(251, 146, 60, 0.08) 0%, rgba(250, 204, 21, 0.05) 25%, rgba(244, 114, 182, 0.04) 50%, transparent 70%)'
-        : 'radial-gradient(ellipse at 30% 40%, rgba(251, 146, 60, 0.15) 0%, rgba(250, 204, 21, 0.1) 25%, rgba(244, 114, 182, 0.08) 50%, transparent 70%)';
+        ? 'radial-gradient(ellipse at 30% 40%, rgba(251, 146, 60, 0.05) 0%, rgba(250, 204, 21, 0.03) 25%, rgba(244, 114, 182, 0.02) 50%, transparent 70%)'
+        : 'radial-gradient(ellipse at 30% 40%, rgba(251, 146, 60, 0.09) 0%, rgba(250, 204, 21, 0.06) 25%, rgba(244, 114, 182, 0.05) 50%, transparent 70%)';
       shaderWrapper.style.background = fallbackGradient;
     }
 
